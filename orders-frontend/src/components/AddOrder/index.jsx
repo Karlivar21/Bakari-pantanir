@@ -30,7 +30,7 @@ const AddOrder = () => {
         };
 
         try {
-            // await axios.post('http://137.184.137.28:5010/api/orders', newOrder);
+            // await axios.post('https://137.184.137.28:5010/api/orders', newOrder);
             navigate('/');
         } catch (error) {
             console.error('Error adding order:', error);
