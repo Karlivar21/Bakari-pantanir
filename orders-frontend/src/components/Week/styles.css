@@ -1,0 +1,103 @@
+.week-view {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto auto;
+    gap: 10px;
+}
+
+.week-view .today-column {
+    grid-column: span 3;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.day-column {
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    box-sizing: border-box;
+}
+
+.day-column h2 {
+    text-align: center;
+    font-family: 'Arial', sans-serif;
+}
+
+.day-column h3 {
+    text-align: center;
+    font-family: 'Arial', sans-serif;
+    color: #555;
+    margin: 0;
+}
+
+.day-column ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.day-column ul li {
+    background-color: rgb(32, 129, 255);
+    padding: 3px;
+    border-radius: 5px;
+    margin: 5px 0;
+    font-family: 'Arial', sans-serif;
+}
+
+.day-column p {
+    text-align: center;
+    color: #999;
+    font-family: 'Arial', sans-serif;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 30%;
+    }
+
+    .home-content {
+        margin-left: 30%;
+        width: 70%;
+    }
+}
+
+@media (max-width: 576px) {
+    .sidebar {
+        width: 40%;
+    }
+
+    .home-content {
+        margin-left: 40%;
+        width: 60%;
+    }
+
+    .week-overview {
+        grid-template-columns: 1fr;
+    }
+
+    .week-overview .today-column {
+        grid-column: span 1;
+    }
+}
+
+@media (max-width: 400px) {
+    .sidebar {
+        width: 100%;
+        position: relative;
+        height: auto;
+    }
+
+    .home-content {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .week-overview {
+        grid-template-columns: 1fr;
+    }
+
+    .week-overview .today-column {
+        grid-column: span 1;
+    }
+}

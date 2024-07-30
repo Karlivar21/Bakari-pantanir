@@ -1,0 +1,60 @@
+// frontend/admin/SoupPlanAdmin.js
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import './styles.css'; // Ensure you create a CSS file for styling the soup plan admin
+
+const SoupPlanAdmin = () => {
+    const [soupPlan, setSoupPlan] = useState({
+        Monday: '',
+        Tuesday: '',
+        Wednesday: '',
+        Thursday: '',
+        Friday: ''
+    });
+
+    useEffect(() => {
+        axios.get('https://api.kallabakari.is/api/soupPlan/getSoupPlan')
+            .then(response => {
+                setSoupPlan(response.data);
+            })
+            .catch(error => {
+                console.error('Error fetching soup plan:', error);
+            });
+    }, []);
+
+    const handleChange = (day, value) => {
+        setSoupPlan(prevPlan => ({
+            ...prevPlan,
+            [day]: value
+        }));
+    };
+
+    const handleSubmit = () => {
+        axios.post('https://api.kallabakari.is/api/soupPlan/updateSoupPlan', soupPlan)
+            .then(response => {
+                alert('Soup plan updated successfully');
+            })
+            .catch(error => {
+                console.error('Error updating soup plan:', error);
+            });
+    };
+
+    return (
+        <div className="soup-plan-admin">
+            <h2 className="header">Update Soup Plan</h2>
+            {Object.keys(soupPlan).map(day => (
+                <div key={day}>
+                    <label>{day}:</label>
+                    <input
+                        type="text"
+                        value={soupPlan[day]}
+                        onChange={e => handleChange(day, e.target.value)}
+                    />
+                </div>
+            ))}
+            <button onClick={handleSubmit}>Save</button>
+        </div>
+    );
+};
+
+export default SoupPlanAdmin;

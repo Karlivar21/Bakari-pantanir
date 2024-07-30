@@ -10,7 +10,7 @@ const Sidebar = () => {
             <ul>
                 <li><Link to="/">Heim</Link></li>
                 <li><Link to="/orders">Pantanir</Link></li>
-                <li><Link to="/about">Súpuplan</Link></li>
+                <li><Link to="/supuplan">Súpuplan</Link></li>
                 <li><Link to="/contact">Starfsmenn</Link></li>
             </ul>
         </div>

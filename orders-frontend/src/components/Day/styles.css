@@ -1,0 +1,49 @@
+
+.day-view {
+    display: flex;
+    width: 60%;
+    height: 500px;
+    align-items: center;
+    border-radius: 15px;
+    border: 5px solid #2128fe;
+}
+
+.day-view li {
+    background-color: white;
+}
+
+.day-view ul {
+    list-style-type: none;
+    width: 90%;
+    padding: 0;
+}
+
+.day-column1 {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    border-radius: 5px;
+    border: 2px solid #2128fe;
+    padding: 2px;
+    margin: 2px;
+}
+
+.day-details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 50%;
+    height: 100%;
+    background-color: #f9f9f9;
+}
+
+.day-products {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 50%;
+    height: 100%;
+    background-color: #f9f9f9;
+}
