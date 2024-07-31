@@ -10,35 +10,36 @@ const soupOptions = [
   'Rjómalöguð Sveppasúpa'
 ];
 
-const SoupPlanAdmin = () => {
-  const [soupPlan, setSoupPlan] = useState({
-    Mánudagur: '',
-    Þriðjudagur: '',
-    Miðvikudagur: '',
-    Fimmtudagur: '',
-    Föstudagur: '',
-    week: {
-      startDate: '',
-      endDate: ''
+const defaultPlan = {
+  Mánudagur: '',
+  Þriðjudagur: '',
+  Miðvikudagur: '',
+  Fimmtudagur: '',
+  Föstudagur: '',
+  week: {
+    startDate: '',
+    endDate: ''
+  }
+};
+
+const mergePlans = (defaultPlan, fetchedPlan) => {
+  const mergedPlan = { ...defaultPlan };
+  for (const key in fetchedPlan) {
+    if (fetchedPlan.hasOwnProperty(key)) {
+      mergedPlan[key] = fetchedPlan[key];
     }
-  });
+  }
+  return mergedPlan;
+};
+
+const SoupPlanAdmin = () => {
+  const [soupPlan, setSoupPlan] = useState(defaultPlan);
 
   useEffect(() => {
     axios.get('https://api.kallabakari.is/api/soupPlan')
       .then(response => {
         const fetchedPlan = response.data;
-        const defaultPlan = {
-          Mánudagur: '',
-          Þriðjudagur: '',
-          Miðvikudagur: '',
-          Fimmtudagur: '',
-          Föstudagur: '',
-          week: {
-            startDate: '',
-            endDate: ''
-          }
-        };
-        const mergedPlan = { ...defaultPlan, ...fetchedPlan };
+        const mergedPlan = mergePlans(defaultPlan, fetchedPlan);
         console.log('Merged Plan:', mergedPlan); // Debugging log
         setSoupPlan(mergedPlan);
       })
