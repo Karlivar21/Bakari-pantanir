@@ -3,81 +3,112 @@ import axios from 'axios';
 import './styles.css';
 
 const soupOptions = [
-    'Aspassúpa',
-    'Brauðsúpa',
-    'Mexíkósk Kjúklingasúpa',
-    'Tómatsúpa',
-    'Rjómalöguð Sveppasúpa'
+  'Aspassúpa',
+  'Brauðsúpa',
+  'Mexíkósk Kjúklingasúpa',
+  'Tómatsúpa',
+  'Rjómalöguð Sveppasúpa'
 ];
 
 const SoupPlanAdmin = () => {
-    const [soupPlan, setSoupPlan] = useState({
-        Monday: '',
-        Tuesday: '',
-        Wednesday: '',
-        Thursday: '',
-        Friday: ''
-    });
+  const [soupPlan, setSoupPlan] = useState({
+    Mánudagur: '',
+    Þriðjudagur: '',
+    Miðvikudagur: '',
+    Fimmtudagur: '',
+    Föstudagur: '',
+    week: {
+      startDate: '',
+      endDate: ''
+    }
+  });
 
-    useEffect(() => {
-        axios.get('https://api.kallabakari.is/api/soupPlan')
-            .then(response => {
-                // Merge the fetched plan with the default structure to ensure all days are present
-                const fetchedPlan = response.data;
-                const defaultPlan = {
-                    Monday: '',
-                    Tuesday: '',
-                    Wednesday: '',
-                    Thursday: '',
-                    Friday: ''
-                };
-                const mergedPlan = { ...defaultPlan, ...fetchedPlan };
-                setSoupPlan(mergedPlan);
-            })
-            .catch(error => {
-                console.error('Error fetching soup plan:', error);
-            });
-    }, []);
+  useEffect(() => {
+    axios.get('https://api.kallabakari.is/api/soupPlan')
+      .then(response => {
+        const fetchedPlan = response.data;
+        const defaultPlan = {
+          Mánudagur: '',
+          Þriðjudagur: '',
+          Miðvikudagur: '',
+          Fimmtudagur: '',
+          Föstudagur: '',
+          week: {
+            startDate: '',
+            endDate: ''
+          }
+        };
+        const mergedPlan = { ...defaultPlan, ...fetchedPlan };
+        setSoupPlan(mergedPlan);
+      })
+      .catch(error => {
+        console.error('Error fetching soup plan:', error);
+      });
+  }, []);
 
-    const handleChange = (day, value) => {
-        setSoupPlan(prevPlan => ({
-            ...prevPlan,
-            [day]: value
-        }));
-    };
+  const handleChange = (day, value) => {
+    setSoupPlan(prevPlan => ({
+      ...prevPlan,
+      [day]: value
+    }));
+  };
 
-    const handleSubmit = () => {
-        axios.post('https://api.kallabakari.is/api/soupPlan', soupPlan)
-            .then(response => {
-                alert('Soup plan updated successfully');
-            })
-            .catch(error => {
-                console.error('Error updating soup plan:', error);
-            });
-    };
+  const handleWeekChange = (field, value) => {
+    setSoupPlan(prevPlan => ({
+      ...prevPlan,
+      week: {
+        ...prevPlan.week,
+        [field]: value
+      }
+    }));
+  };
 
-    return (
-        <div className='soup-plan-admin'>
-            <h2>Update Soup Plan</h2>
-            {Object.keys(soupPlan).map(day => (
-                <div key={day}>
-                    <label>{day}:</label>
-                    <select
-                        value={soupPlan[day]}
-                        onChange={e => handleChange(day, e.target.value)}
-                    >
-                        <option value="">Select a soup</option>
-                        {soupOptions.map((soup, index) => (
-                            <option key={index} value={soup}>
-                                {soup}
-                            </option>
-                        ))}
-                    </select>
-                </div>
+  const handleSubmit = () => {
+    axios.post('https://api.kallabakari.is/api/soupPlan', soupPlan)
+      .then(response => {
+        alert('Soup plan updated successfully');
+      })
+      .catch(error => {
+        console.error('Error updating soup plan:', error);
+      });
+  };
+
+  return (
+    <div className='soup-plan-admin'>
+      <h2>Súpuplan</h2>
+      <div className="week-inputs">
+        <label>Start Date:</label>
+        <input
+          type="date"
+          value={soupPlan.week.startDate}
+          onChange={e => handleWeekChange('startDate', e.target.value)}
+        />
+        <label>End Date:</label>
+        <input
+          type="date"
+          value={soupPlan.week.endDate}
+          onChange={e => handleWeekChange('endDate', e.target.value)}
+        />
+      </div>
+      {Object.keys(soupPlan).filter(day => day !== 'week').map(day => (
+        <div className="soup" key={day}>
+          <label>{day}:</label>
+          <select
+            value={soupPlan[day]}
+            onChange={e => handleChange(day, e.target.value)}
+          >
+            <option value="">Select a soup</option>
+            {soupOptions.map((soup, index) => (
+              <option key={index} value={soup}>
+                {soup}
+              </option>
             ))}
-            <button onClick={handleSubmit}>Save</button>
+          </select>
         </div>
-    );
+      ))}
+      <button className="save-button" onClick={handleSubmit}>Save</button>
+    </div>
+  );
 };
 
 export default SoupPlanAdmin;
