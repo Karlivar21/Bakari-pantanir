@@ -39,6 +39,7 @@ const SoupPlanAdmin = () => {
           }
         };
         const mergedPlan = { ...defaultPlan, ...fetchedPlan };
+        console.log('Merged Plan:', mergedPlan); // Debugging log
         setSoupPlan(mergedPlan);
       })
       .catch(error => {
