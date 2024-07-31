@@ -1,7 +1,14 @@
-// frontend/admin/SoupPlanAdmin.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './styles.css'; // Ensure you create a CSS file for styling the soup plan admin
+import './styles.css';
+
+const soupOptions = [
+    'Aspassúpa',
+    'Brauðsúpa',
+    'Mexíkósk Kjúklingasúpa',
+    'Tómatsúpa',
+    'Rjómalöguð Sveppasúpa'
+];
 
 const SoupPlanAdmin = () => {
     const [soupPlan, setSoupPlan] = useState({
@@ -40,16 +47,22 @@ const SoupPlanAdmin = () => {
     };
 
     return (
-        <div className="soup-plan-admin">
-            <h2 className="header">Update Soup Plan</h2>
+        <div className='soup-plan-admin'>
+            <h2>Update Soup Plan</h2>
             {Object.keys(soupPlan).map(day => (
                 <div key={day}>
                     <label>{day}:</label>
-                    <input
-                        type="text"
+                    <select
                         value={soupPlan[day]}
                         onChange={e => handleChange(day, e.target.value)}
-                    />
+                    >
+                        <option value="">Select a soup</option>
+                        {soupOptions.map((soup, index) => (
+                            <option key={index} value={soup}>
+                                {soup}
+                            </option>
+                        ))}
+                    </select>
                 </div>
             ))}
             <button onClick={handleSubmit}>Save</button>
