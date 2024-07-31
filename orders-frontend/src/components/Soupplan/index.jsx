@@ -22,7 +22,17 @@ const SoupPlanAdmin = () => {
     useEffect(() => {
         axios.get('https://api.kallabakari.is/api/soupPlan')
             .then(response => {
-                setSoupPlan(response.data);
+                // Merge the fetched plan with the default structure to ensure all days are present
+                const fetchedPlan = response.data;
+                const defaultPlan = {
+                    Monday: '',
+                    Tuesday: '',
+                    Wednesday: '',
+                    Thursday: '',
+                    Friday: ''
+                };
+                const mergedPlan = { ...defaultPlan, ...fetchedPlan };
+                setSoupPlan(mergedPlan);
             })
             .catch(error => {
                 console.error('Error fetching soup plan:', error);
