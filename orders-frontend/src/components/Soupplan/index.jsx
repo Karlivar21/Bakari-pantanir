@@ -20,7 +20,7 @@ const SoupPlanAdmin = () => {
     });
 
     useEffect(() => {
-        axios.get('https://api.kallabakari.is/api/soupPlan/getSoupPlan')
+        axios.get('https://api.kallabakari.is/api/soupPlan')
             .then(response => {
                 setSoupPlan(response.data);
             })
@@ -37,7 +37,7 @@ const SoupPlanAdmin = () => {
     };
 
     const handleSubmit = () => {
-        axios.post('https://api.kallabakari.is/api/soupPlan/updateSoupPlan', soupPlan)
+        axios.post('https://api.kallabakari.is/api/soupPlan', soupPlan)
             .then(response => {
                 alert('Soup plan updated successfully');
             })
