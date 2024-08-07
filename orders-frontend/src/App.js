@@ -1,5 +1,5 @@
 // App.js
-import React, { useEffect, useContext } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import OrderList from './components/OrderList';
 import Home from './components/Home';
@@ -7,33 +7,28 @@ import AddOrder from './components/AddOrder';
 import Sidebar from './components/Sidebar';
 import SoupPlanAdmin from './components/Soupplan';
 import SignIn from './components/SignIn';
-import { AuthProvider, AuthContext } from './AuthContext';
-import PrivateRoute from './PrivateRoute';
+import { AuthProvider } from './auth/AuthContext'; // Import only the AuthProvider
+import PrivateRoute from './routes/PrivateRoute';
+import AuthInitializer from './auth/AuthInit'; // Import AuthInitializer
+import './index.css'; // Import Tailwind CSS
 
 const App = () => {
-    const { login } = useContext(AuthContext);
-
-    useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (token) {
-            login(token); // Automatically log in with token
-        }
-    }, [login]);
-
     return (
         <AuthProvider>
             <Router>
-                <div className="App">
-                    <Sidebar />
-                    <Routes>
-                        <PrivateRoute path="/" element={<Home />} />
-                        <PrivateRoute path="/orders" element={<OrderList />} />
-                        <PrivateRoute path="/supuplan" element={<SoupPlanAdmin />} />
-                        <Route path="/signin" element={<SignIn />} />
-                        <PrivateRoute path="/add-order" element={<AddOrder />} />
-                        <Route path="/contact" element={<Contact />} />
-                    </Routes>
-                </div>
+                <AuthInitializer>
+                    <div className="App">
+                        <Routes>
+                            <Route path="/signin" element={<SignIn />} />
+                            <Route element={<PrivateRoute />}>
+                                <Route path="/" element={<Home />} />
+                                <Route path="/orders" element={<OrderList />} />
+                                <Route path="/supuplan" element={<SoupPlanAdmin />} />
+                                <Route path="/add-order" element={<AddOrder />} />
+                            </Route>
+                        </Routes>
+                    </div>
+                </AuthInitializer>
             </Router>
         </AuthProvider>
     );
