@@ -10,7 +10,7 @@ const AuthInitializer = ({ children }) => {
         if (token) {
             login(token); // Automatically log in with token
         }
-    }, [login]);
+    }, []);
 
     return <>{children}</>;
 };

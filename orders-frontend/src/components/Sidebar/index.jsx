@@ -1,18 +1,55 @@
-// components/Sidebar.js
-import React from 'react';
-import { Link } from 'react-router-dom';
-import './styles.css'; // Ensure you create a CSS file for styling the sidebar
+import React, { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../auth/AuthContext'; // Adjust the path as necessary
 
 const Sidebar = () => {
+    const navigate = useNavigate();
+    const { logout } = useContext(AuthContext);
+
+    const handleLogout = () => {
+        logout(); // Call the logout function from context
+    };
+
+    // Handler for navigating to different routes
+    const handleNavigation = (path) => {
+        navigate(path);
+    };
+
     return (
-        <div className="sidebar">
-            <h2>Pantanakerfi</h2>
-            <ul>
-                <li><Link to="/">Heim</Link></li>
-                <li><Link to="/orders">Pantanir</Link></li>
-                <li><Link to="/supuplan">Súpuplan</Link></li>
-                <li><Link to="/contact">Starfsmenn</Link></li>
+        <div className="flex flex-col bg-gray-700 w-1/6 min-h-screen">
+            <h2 className='font-serif p-2 text-white font-bold text-2xl mb-5'>Pantanakerfi</h2>
+            <ul className="flex-grow">
+                <li
+                    className='font-serif text-white text-xl border p-2 cursor-pointer hover:bg-gray-600'
+                    onClick={() => handleNavigation('/')}
+                >
+                    Heim
+                </li>
+                <li
+                    className='font-serif text-white text-xl border p-2 cursor-pointer hover:bg-gray-600'
+                    onClick={() => handleNavigation('/orders')}
+                >
+                    Pantanir
+                </li>
+                <li
+                    className='font-serif text-white text-xl border p-2 cursor-pointer hover:bg-gray-600'
+                    onClick={() => handleNavigation('/supuplan')}
+                >
+                    Súpuplan
+                </li>
+                <li
+                    className='font-serif text-white text-xl border p-2 cursor-pointer hover:bg-gray-600'
+                    onClick={() => handleNavigation('/contact')}
+                >
+                    Starfsmenn
+                </li>
             </ul>
+            <button
+                className='bg-blue-600 text-white text-xl mt-auto py-2 px-4 rounded-lg m-4'
+                onClick={handleLogout}
+            >
+                Skrá út
+            </button>
         </div>
     );
 };

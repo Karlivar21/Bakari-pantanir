@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../Sidebar'; // Import the Sidebar component
-import './styles.css'; // Ensure you create a CSS file for styling the order list
 
 const OrderList = () => {
     const [orders, setOrders] = useState([]);
@@ -44,39 +43,46 @@ const OrderList = () => {
     };
 
     return (
-        <div className="order-list-container">
-            <Sidebar /> {/* Add the Sidebar component here */}
-            <div className="order-list-content">
-                <h1>Allar pantanir</h1>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Phone</th>
-                            <th>Email</th>
-                            <th>Date</th>
-                            <th>Products</th>
-                            <th>Message</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {orders.map((order) => (
-                            <tr key={order._id}>
-                                <td>{order.name}</td>
-                                <td>{order.phone}</td>
-                                <td>{order.email}</td>
-                                <td>{new Date(order.date).toLocaleDateString()}</td>
-                                <td>
-                                    {formatProducts(order).map((product, index) => (
-                                        <div key={index}>{product}</div>
-                                    ))}
-                                </td>
-                                <td>{order.user_message ? order.user_message : 'No Message'}</td>
+        <div className="flex min-h-screen">
+            <Sidebar/> {/* Sidebar takes 20% of the width */}
+            <div className="flex-1 p-6">
+                <h1 className="text-3xl font-bold mb-4">Allar pantanir</h1>
+                <div className="overflow-x-auto">
+                    <table className="min-w-full divide-y divide-gray-200 bg-white">
+                        <thead className="bg-gray-100">
+                            <tr>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Products</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Message</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
-                <button className="fab" onClick={handleAddOrder}>+</button>
+                        </thead>
+                        <tbody className="bg-white divide-y divide-gray-200">
+                            {orders.map((order) => (
+                                <tr key={order._id}>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{order.name}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{order.phone}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{order.email}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{new Date(order.date).toLocaleDateString()}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        {formatProducts(order).map((product, index) => (
+                                            <div key={index} className="text-sm">{product}</div>
+                                        ))}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{order.user_message ? order.user_message : 'No Message'}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+                <button
+                    className="fixed bottom-6 right-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full shadow-lg"
+                    onClick={handleAddOrder}
+                >
+                    +
+                </button>
             </div>
         </div>
     );

@@ -4,7 +4,6 @@ import Sidebar from '../Sidebar';
 import DayView from '../Day';
 import WeekView from '../Week';
 import MonthView from '../Month';
-import './styles.css';
 
 const Home = () => {
     const [orders, setOrders] = useState([]);
@@ -79,35 +78,59 @@ const Home = () => {
     };
 
     return (
-        <div className="home-container">
-            <div className="home-content">
-                <div className="view-selector">
-                    <select onChange={(e) => setView(e.target.value)} value={view}>
+        <div className="flex min-h-screen">
+            <Sidebar className="w-1/5" /> {/* Sidebar takes 20% of the width */}
+            <div className="flex-1 p-4">
+                <div className="flex justify-end mb-5">
+                    <select
+                        onChange={(e) => setView(e.target.value)}
+                        value={view}
+                        className="text-blue-500 text-lg w-24 rounded-lg border border-gray-300 p-1"
+                    >
                         <option value="day">Day</option>
                         <option value="week">Week</option>
                         <option value="month">Month</option>
                     </select>
                 </div>
-                <div className="view-container">
+                <div className="flex flex-col items-center">
                     {view === 'day' && <DayView orders={orders} date={selectedDate.toLocaleDateString('is-IS')} />}
                     {view === 'week' && <WeekView weekOrders={weekOrders} />}
                     {view === 'month' && <MonthView orders={orders} />}
                 </div>
-                <div className="navigation-buttons">
+                <div className="flex justify-between mt-5">
                     {view === 'day' && (
                         <>
-                            <button onClick={handlePrevDay}>Previous</button>
-                            <button onClick={handleNextDay}>Next</button>
+                            <button
+                                onClick={handlePrevDay}
+                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                            >
+                                Previous
+                            </button>
+                            <button
+                                onClick={handleNextDay}
+                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                            >
+                                Next
+                            </button>
                         </>
                     )}
                     {view === 'week' && (
                         <>
-                            <button onClick={handlePrevWeek}>Previous</button>
-                            <button onClick={handleNextWeek}>Next</button>
+                            <button
+                                onClick={handlePrevWeek}
+                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                            >
+                                Previous
+                            </button>
+                            <button
+                                onClick={handleNextWeek}
+                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                            >
+                                Next
+                            </button>
                         </>
                     )}
                 </div>
-                
             </div>
         </div>
     );

@@ -19,8 +19,9 @@ const SignIn = () => {
     const handleSignIn = async e => {
         e.preventDefault();
         try {
-            const res = await axios.post('https://api.kallabakari.is/auth/login', formData);
+            const res = await axios.post('https://api.kallabakari.is/api/auth/login', formData);
             login(res.data.token); // Update context to mark user as logged in with token
+            console.log('Logged in:', res.data.token); // Debugging log
         } catch (err) {
             console.error('Sign In Error:', err);
             setError('Invalid credentials. Please try again.');

@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import OrderList from './components/OrderList';
 import Home from './components/Home';
 import AddOrder from './components/AddOrder';
-import Sidebar from './components/Sidebar';
 import SoupPlanAdmin from './components/Soupplan';
 import SignIn from './components/SignIn';
 import { AuthProvider } from './auth/AuthContext'; // Import only the AuthProvider
@@ -14,8 +13,8 @@ import './index.css'; // Import Tailwind CSS
 
 const App = () => {
     return (
+      <Router>
         <AuthProvider>
-            <Router>
                 <AuthInitializer>
                     <div className="App">
                         <Routes>
@@ -29,8 +28,8 @@ const App = () => {
                         </Routes>
                     </div>
                 </AuthInitializer>
-            </Router>
-        </AuthProvider>
+          </AuthProvider>
+        </Router>
     );
 };
 
