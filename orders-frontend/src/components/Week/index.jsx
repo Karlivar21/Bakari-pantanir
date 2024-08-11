@@ -1,42 +1,62 @@
-// WeekView.js
 import React from 'react';
-import './styles.css'
+import { useNavigate } from 'react-router-dom';
+
 const WeekView = ({ weekOrders }) => {
+    const navigate = useNavigate();
+
     const formatProducts = (order) => {
         const products = [];
-
-        order.cakes.forEach((cake) => {
-            products.push(`${cake.cake} - Stærð: ${cake.size}${cake.filling ? `, Fylling: ${cake.filling}` : ''}${cake.bottom ? `, Botn: ${cake.bottom}` : ''}${cake.smjorkrem ? `, Smjörkrem: ${cake.smjorkrem}` : ''}`);
+    
+        order.products.forEach((product) => {
+            switch (product.type) {
+                case 'cake':
+                    const cake = product.details;
+                    products.push(`${cake.cake} - Stærð: ${cake.size}${cake.filling ? `, Fylling: ${cake.filling}` : ''}${cake.bottom ? `, Botn: ${cake.bottom}` : ''}${cake.smjorkrem ? `, Smjörkrem: ${cake.smjorkrem}` : ''}`);
+                    break;
+                case 'bread':
+                    const bread = product.details;
+                    products.push(`${bread.bread} - Magn: ${bread.quantity}`);
+                    break;
+                case 'minidonut':
+                    const minidonut = product.details;
+                    products.push(`Minidonuts - Magn: ${minidonut.quantity}`);
+                    break;
+                default:
+                    products.push(`Unknown product type: ${product.type}`);
+            }
         });
-
-        order.breads.forEach((bread) => {
-            products.push(`${bread.bread} - Magn: ${bread.quantity}`);
-        });
-
-        order.minidonuts.forEach((minidonut) => {
-            products.push(`Minidonuts - Magn: ${minidonut.quantity}`);
-        });
-
+    
         return products;
     };
+
+    const handleOrderClick = (order) => {
+        navigate(`/order/${order.id}`);
+    };
+
     return (
-        <div className="week-view">
-            {weekOrders.weekDays && weekOrders.weekDays.map((day, index) => (
-                <div key={day} className={`day-column ${index === 0 ? 'today-column' : ''}`}>
-                    <h2>{day}</h2>
-                    <h3>{weekOrders.dates[index]}</h3>
+        <div className="flex flex-wrap items-center p-6">
+            {weekOrders.weekDays && weekOrders.weekDays.map((day, dayIndex) => (
+                <div key={day} className="flex flex-col min-h-40 items-center border w-1/3 p-4">
+                    <h2 className='font-serif text-xl font-bold'>{day}</h2>
+                    <h3 className='font-serif text-lg'>{weekOrders.dates[dayIndex]}</h3>
                     {weekOrders.ordersByDay[day].length > 0 ? (
                         <ul>
-                            {weekOrders.ordersByDay[day].map((order, index) => (
-                                <li key={index}>
-                                    {formatProducts(order).map((product, index) => (
-                                        <div key={index}>{product}</div>
+                            {weekOrders.ordersByDay[day].map((order, orderIndex) => (
+                                <li key={orderIndex}>
+                                    {formatProducts(order).map((product, productIndex) => (
+                                        <div
+                                            onClick={() => handleOrderClick(order)} // Ensure it's a function that gets called on click
+                                            className='font-serif border-2 border-blue-500 rounded-lg p-1 cursor-pointer'
+                                            key={productIndex}
+                                        >
+                                            {product}
+                                        </div>
                                     ))}
                                 </li>
                             ))}
                         </ul>
                     ) : (
-                        <p>No orders</p>
+                        <p className='font-serif text-lg'>No orders</p>
                     )}
                 </div>
             ))}

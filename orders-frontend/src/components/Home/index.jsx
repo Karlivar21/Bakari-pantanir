@@ -7,7 +7,7 @@ import MonthView from '../Month';
 
 const Home = () => {
     const [orders, setOrders] = useState([]);
-    const [weekOrders, setWeekOrders] = useState([]);
+    const [weekOrders, setWeekOrders] = useState({});
     const [view, setView] = useState('week');
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [currentWeekStart, setCurrentWeekStart] = useState(new Date());
@@ -17,6 +17,7 @@ const Home = () => {
             try {
                 const response = await axios.get('https://api.kallabakari.is/api/orders');
                 setOrders(response.data);
+                console.log('Orders:', response.data); // Debugging log
                 organizeByWeek(response.data, currentWeekStart);
             } catch (error) {
                 console.error('Error fetching orders:', error);

@@ -1,0 +1,253 @@
+{
+    "kokur": [
+        {
+            "id": 1, 
+            "name": "Marsipantertur",
+            "size": [
+                {
+                    "size": "12 manna",
+                    "price": 10.500
+                },
+                {
+                    "size": "16 manna",
+                    "price": 12.000
+                },
+                {
+                    "size": "20 manna",
+                    "price": 15.000
+                },
+                {
+                    "size": "30 manna",
+                    "price": 22.500
+                },
+                {
+                    "size": "40 manna",
+                    "price": 29.000
+                },
+                {
+                    "size": "50 manna",
+                    "price": 35.000
+                },
+                {
+                    "size": "60 manna",
+                    "price": 40.000
+                }
+            ],
+            "fillings": [
+                "sælgætis m/marsbitum", 
+                "jarðaberja", 
+                "sherrý", 
+                "súkkúlaði", 
+                "karamellu/krókant",
+                "hindberja",
+                "bananasplitt",
+                "karamellu-daim" 
+            ]
+        }, 
+        {
+            "id": 2,
+            "name": "Smjörkremskaka",
+            "size": [
+                {
+                    "size": "8-12 manna",
+                    "price": 12.000
+                },
+                {
+                    "size": "15-20 manna",
+                    "price": 20.000
+                },
+                {
+                    "size": "25-30 manna",
+                    "price": 26.000
+                }
+            ],
+            "botnar": [
+                "Súkkulaðibotnar", "vanillubotnar", "karamellubotnar"
+            ],
+            "smjorkrem" :
+            [
+                "súkkúlaði", "vanilla", "saltkaramella", "oreo", "jarðaberja"
+            ]
+        },
+        {
+            "id": 3,
+            "name": "Skírnarkoddar",
+            "size": [
+                {
+                    "size": "20 manna",
+                    "price": 18.000
+                },
+                {
+                    "size": "30 manna",
+                    "price": 24.000
+                },
+                {
+                    "size": "40 manna",
+                    "price": 31.500
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "name": "Afmælistertur",
+            "size": [
+                {
+                    "size": "20 manna",
+                    "price": 8.500
+                },
+                {
+                    "size": "20 manna með mynd",
+                    "price": 10.500
+                },
+                {
+                    "size": "30 manna",
+                    "price": 10.500
+                },
+                {
+                    "size": "30 manna með mynd",
+                    "price": 12.500
+                }
+            ]
+        },
+        {
+            "id": 5,
+            "name": "Brauðtertur",
+            "size": [
+                {
+                    "size": "16 manna",
+                    "price": 12.000
+                },
+                {
+                    "size": "20 manna",
+                    "price": 15.000
+                },
+                {
+                    "size": "30 manna",
+                    "price": 21.900
+                },
+                {
+                    "size": "40 manna",
+                    "price": 24.900
+                }
+            ]
+        }, 
+        {
+            "id": 6,
+            "name": "Marengsterta",
+            "size": [
+                {
+                    "size": "30 manna",
+                    "price": 18.700
+                },
+                {
+                    "size": "40 manna",
+                    "price": 24.200
+                },
+                {
+                    "size": "50 manna",
+                    "price": 29.700
+                }
+            ]
+        },
+        {
+            "id": 7,
+            "name": "Fermingarbækur",
+            "size": [
+                {
+                    "size": "30 manna",
+                    "price": 27.000
+                },
+                {
+                    "size": "40 manna",
+                    "price": 35.500
+                },
+                {
+                    "size": "50 manna",
+                    "price": 42.000
+                },
+                {
+                    "size": "60 manna",
+                    "price": 48.000
+                }
+            ]
+        },
+        {
+            "id": 8,
+            "name": "Kransakökur",
+            "size": [
+                {
+                    "size": "20 manna",
+                    "price": 19.900
+                },
+                {
+                    "size": "30 manna",
+                    "price": 27.000
+                },
+                {
+                    "size": "40 manna",
+                    "price": 33.000
+                }
+            ]
+        },
+        {
+            "id": 9,
+            "name": "Amerísk súkkulaði",
+            "size": [
+                {
+                    "size": "16 manna",
+                    "price": 10.800
+                },
+                {
+                    "size": "20 manna",
+                    "price": 13.000
+                },
+                {
+                    "size": "30 manna",
+                    "price": 18.400
+                },
+                {
+                    "size": "40 manna",
+                    "price": 23.000
+                },
+                {
+                    "size": "50 manna",
+                    "price": 30.000
+                },
+                {
+                    "size": "60 manna",
+                    "price": 36.000
+                }
+            ]
+        },
+        {
+            "id": 10,
+            "name": "Frönsk súkkulaðiterta",
+            "size": [
+                {
+                    "size": "16 manna",
+                    "price": 10.800
+                },
+                {
+                    "size": "20 manna",
+                    "price": 13.500
+                },
+                {
+                    "size": "30 manna",
+                    "price": 20.250
+                },
+                {
+                    "size": "40 manna",
+                    "price": 27.000
+                },
+                {
+                    "size": "50 manna",
+                    "price": 33.750
+                },
+                {
+                    "size": "60 manna",
+                    "price": 39.000
+                }
+            ]
+        }
+    ]
+}

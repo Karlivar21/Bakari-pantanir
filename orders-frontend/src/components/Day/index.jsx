@@ -1,24 +1,40 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid'; // Import uuid for generating unique IDs
 
 const DayView = ({ orders, date }) => {
+    const navigate = useNavigate();
+
     const dayOrders = orders.filter(order => new Date(order.date).toLocaleDateString('is-IS') === date);
 
     const formatProducts = (order) => {
         const products = [];
 
-        order.cakes.forEach((cake) => {
-            products.push(`${cake.cake} - Stærð: ${cake.size}${cake.filling ? `, Fylling: ${cake.filling}` : ''}${cake.bottom ? `, Botn: ${cake.bottom}` : ''}${cake.smjorkrem ? `, Smjörkrem: ${cake.smjorkrem}` : ''}`);
-        });
-
-        order.breads.forEach((bread) => {
-            products.push(`${bread.bread} - Magn: ${bread.quantity}`);
-        });
-
-        order.minidonuts.forEach((minidonut) => {
-            products.push(`Minidonuts - Magn: ${minidonut.quantity}`);
+        order.products.forEach((product) => {
+            switch (product.type) {
+                case 'cake':
+                    const cake = product.details;
+                    products.push(`${cake.cake} - Stærð: ${cake.size}${cake.filling ? `, Fylling: ${cake.filling}` : ''}${cake.bottom ? `, Botn: ${cake.bottom}` : ''}${cake.smjorkrem ? `, Smjörkrem: ${cake.smjorkrem}` : ''}`);
+                    break;
+                case 'bread':
+                    const bread = product.details;
+                    products.push(`${bread.bread} - Magn: ${bread.quantity}`);
+                    break;
+                case 'minidonut':
+                    const minidonut = product.details;
+                    products.push(`Minidonuts - Magn: ${minidonut.quantity}`);
+                    break;
+                default:
+                    products.push(`Unknown product type: ${product.type}`);
+            }
         });
 
         return products;
+    };
+
+    const handleOrderClick = (uniqueId) => {
+        console.log('Order clicked:', uniqueId); // Debugging log
+        navigate(`/order/${uniqueId}`);
     };
 
     return (
@@ -27,15 +43,24 @@ const DayView = ({ orders, date }) => {
             {dayOrders.length > 0 ? (
                 <div className="flex flex-col w-full max-w-4xl border-2 border-blue-700 rounded-lg p-4 space-y-4 bg-white shadow-lg">
                     {dayOrders.map((order, index) => (
-                        <div className="flex flex-col md:flex-row border border-blue-700 rounded-lg p-4 space-y-4 md:space-y-0 md:space-x-4 bg-gray-100" key={index}>
+                        <div
+                            key={index}
+                            className="flex flex-col md:flex-row border border-blue-700 rounded-lg p-4 space-y-4 md:space-y-0 md:space-x-4 bg-gray-100"
+                        >
                             <div className="flex-1 bg-gray-200 p-4 rounded-lg">
                                 <p className="font-semibold text-lg">{order.name}</p>
                                 <p>{order.phone}</p>
                                 <p>{order.email}</p>
+                                <button
+                                    onClick={() => handleOrderClick(order.id)}
+                                    className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                                >
+                                    View Details
+                                </button>
                             </div>
                             <div className="flex-1 bg-gray-200 p-4 rounded-lg">
-                                {formatProducts(order).map((product, index) => (
-                                    <p key={index} className="text-sm">{product}</p>
+                                {formatProducts(order).map((product, idx) => (
+                                    <p key={idx} className="text-sm">{product}</p>
                                 ))}
                             </div>
                         </div>

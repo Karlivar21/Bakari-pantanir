@@ -26,19 +26,26 @@ const OrderList = () => {
 
     const formatProducts = (order) => {
         const products = [];
-
-        order.cakes.forEach((cake) => {
-            products.push(`${cake.cake} - Stærð: ${cake.size}${cake.filling ? `, Fylling: ${cake.filling}` : ''}${cake.bottom ? `, Botn: ${cake.bottom}` : ''}${cake.smjorkrem ? `, Smjörkrem: ${cake.smjorkrem}` : ''}`);
+    
+        order.products.forEach((product) => {
+            switch (product.type) {
+                case 'cake':
+                    const cake = product.details;
+                    products.push(`${cake.cake} - Stærð: ${cake.size}${cake.filling ? `, Fylling: ${cake.filling}` : ''}${cake.bottom ? `, Botn: ${cake.bottom}` : ''}${cake.smjorkrem ? `, Smjörkrem: ${cake.smjorkrem}` : ''}`);
+                    break;
+                case 'bread':
+                    const bread = product.details;
+                    products.push(`${bread.bread} - Magn: ${bread.quantity}`);
+                    break;
+                case 'minidonut':
+                    const minidonut = product.details;
+                    products.push(`Minidonuts - Magn: ${minidonut.quantity}`);
+                    break;
+                default:
+                    products.push(`Unknown product type: ${product.type}`);
+            }
         });
-
-        order.breads.forEach((bread) => {
-            products.push(`${bread.bread} - Magn: ${bread.quantity}`);
-        });
-
-        order.minidonuts.forEach((minidonut) => {
-            products.push(`Minidonuts - Magn: ${minidonut.quantity}`);
-        });
-
+    
         return products;
     };
 
