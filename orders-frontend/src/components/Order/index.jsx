@@ -46,7 +46,7 @@ const OrderView = () => {
             switch (product.type) {
                 case 'cake':
                     const cake = product.details;
-                    products.push(`${cake.cake} - Stærð: ${cake.size}${cake.filling ? `, Fylling: ${cake.filling}` : ''}${cake.bottom ? `, Botn: ${cake.bottom}` : ''}${cake.smjorkrem ? `, Smjörkrem: ${cake.smjorkrem}` : ''}`);
+                    products.push(`${cake.cake} - Stærð: ${cake.size}${cake.filling ? `, Fylling: ${cake.filling}` : ''}${cake.bottom ? `, Botn: ${cake.bottom}` : ''}${cake.smjorkrem ? `, Smjörkrem: ${cake.smjorkrem}` : ''}${cake.text? `, Texti: ${cake.text}` : ''}${cake.skreyting? `, Skreyting: ${cake.skreyting}` : ''}`);
                     break;
                 case 'bread':
                     const bread = product.details;
@@ -80,12 +80,24 @@ const OrderView = () => {
                             <p className="font-serif">Símanúmer: {order.phone}</p>
                             <p className="font-serif">Netfang: {order.email}</p>
                             <p className="font-serif">Dagsetning: {new Date(order.date).toLocaleDateString()}</p>
+                            <p className='font-serif'>Greitt: {order.payed ? 'Já' : 'Nei'}</p>
+                            <p className="font-serif">Athugasemdir: {order.comments}</p>
                         </div>
                         <div className="flex-1 bg-gray-200 p-4 rounded-lg">
                             {formatProducts(order).map((product, index) => (
                                 <p className="font-serif text-lg" key={index}>{product}</p>
                             ))}
                         </div>
+                        {order.details && order.details.image && (
+                            <div className="flex-1 bg-gray-200 p-4 rounded-lg">
+                                <h3 className="text-xl font-serif font-bold mb-2">Order Image</h3>
+                                <img 
+                                    src={`https://api.kallabakari.is/uploads/${order.details.image}`} 
+                                    alt="Order" 
+                                    className="max-w-full h-auto"
+                                />
+                            </div>
+                        )}
                     </div>
                 </div>
                 <button 

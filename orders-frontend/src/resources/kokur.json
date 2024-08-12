@@ -49,16 +49,24 @@
             "name": "Smjörkremskaka",
             "size": [
                 {
-                    "size": "8-12 manna",
-                    "price": 12.000
+                    "size": "6-8 manna",
+                    "price": 8.500
                 },
                 {
-                    "size": "15-20 manna",
+                    "size": "12-15 manna",
+                    "price": 14.900
+                },
+                {
+                    "size": "20-25 manna",
                     "price": 20.000
                 },
                 {
                     "size": "25-30 manna",
-                    "price": 26.000
+                    "price": 25.000
+                },
+                {
+                    "size": "35-40 manna",
+                    "price": 29.000
                 }
             ],
             "botnar": [
@@ -106,6 +114,14 @@
                 {
                     "size": "30 manna með mynd",
                     "price": 12.500
+                },
+                {
+                    "size": "40 manna",
+                    "price": 12.500
+                },
+                {
+                    "size": "40 manna með mynd",
+                    "price": 14.500
                 }
             ]
         },

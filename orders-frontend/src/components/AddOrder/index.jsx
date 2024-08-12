@@ -17,13 +17,18 @@ const AddOrder = () => {
     const [productType, setProductType] = useState('');
     const [quantity, setQuantity] = useState('');
     const [selectedCake, setSelectedCake] = useState('');
+    const [payed, setPayed] = useState(false);
+    const [selectedText, setSelectedText] = useState('');
+    const [selectedSkreyting, setSelectedSkreyting] = useState('');
     const [cakeDetails, setCakeDetails] = useState({
         cake: '',
         size: '',
         filling: '',
         bottom: '',
         smjorkrem: '',
-        url: ''
+        url: '',
+        text: '',
+        skreyting: ''
     });
     const navigate = useNavigate();
 
@@ -70,7 +75,9 @@ const AddOrder = () => {
             filling: '',
             bottom: '',
             smjorkrem: '',
-            url: ''
+            url: '',
+            text: '',
+            skreyting: ''
         });
         setSelectedCake('');
     };
@@ -100,6 +107,16 @@ const AddOrder = () => {
         setCakeDetails(prevDetails => ({ ...prevDetails, url: e.target.value }));
     };
 
+    const handleTextChange = (e) => {
+        setCakeDetails(prevDetails => ({ ...prevDetails, text: e.target.value }));
+    };
+
+    const handleSkreytingChange = (e) => {
+        setCakeDetails(prevDetails => ({ ...prevDetails, skreyting: e.target.value }));
+    };
+
+
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -111,6 +128,7 @@ const AddOrder = () => {
             date,
             products,
             user_message: userMessage,
+            payed
         };
 
         try {
@@ -129,33 +147,40 @@ const AddOrder = () => {
                 <div className="form-container flex-1 md:w-2/3">
                     <h1 className="text-3xl font-bold font-serif mb-4">Bæta við pöntun</h1>
                     <form onSubmit={handleSubmit} className="flex flex-col w-full">
-                        <label className='mt-4 font-serif text-xl'>Nafn</label>
-                        <input className='border border-blue rounded-lg h-8 w-full mt-2 p-2' type="text" value={name} onChange={(e) => setName(e.target.value)} required />
-                        <label className='mt-4 font-serif text-xl'>Símanúmer</label>
-                        <input className='border border-blue rounded-lg h-8 w-full mt-2 p-2' type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} required />
-                        <label className='mt-4 font-serif text-xl'>Netfang</label>
-                        <input className='border border-blue rounded-lg h-8 w-full mt-2 p-2' type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-                        <label className='mt-4 font-serif text-xl'>Dagsetning</label>
-                        <input className='border border-blue rounded-lg h-8 w-2/5 mt-2 p-2' type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
-
+                        <div className="flex flex-wrap bg-gray-200 rounded-lg p-2">
+                            <label className='mt-4 font-serif text-xl mr-2'>Nafn</label>
+                            <input className='border border-blue rounded-lg h-8 w-1/3 mt-2 p-2 mr-3' type="text" value={name} onChange={(e) => setName(e.target.value)} required />
+                            <label className='mt-4 font-serif text-xl mr-2'>Símanúmer</label>
+                            <input className='border border-blue rounded-lg h-8 w-1/3 mt-2 p-2' type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} required />
+                            <label className='mt-4 font-serif text-xl'>Netfang</label>
+                            <input className='border border-blue rounded-lg h-8 w-1/3 mt-2 p-2' type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                            <label className='mt-4 font-serif text-xl'>Dagsetning</label>
+                            <input className='border border-blue rounded-lg h-8 w-1/3 mt-2 p-2' type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
+                            <label className='mt-4 font-serif text-xl'>Greitt?</label>
+                            <input className='border border-blue rounded-lg h-8 w-1/5 mt-2 p-2' type="checkbox" value={payed} onChange={(e) => setPayed(e.target.checked)} />
+                            <label className='mt-4 font-serif text-xl mr-3'>Athugasemd</label>
+                            <textarea className='border border-blue rounded-lg h-24 w-2/4 mt-2 p-2' value={userMessage} onChange={(e) => setUserMessage(e.target.value)} />
+                        </div>
                         {/* Add Product Section */}
-                        <div className="flex flex-col mt-4">
-                            <label className='font-serif text-xl'>Vörur</label>
-                            <select className='border border-blue rounded-lg h-10 w-2/5 mt-2 p-2'
-                                onChange={(e) => handleChangeProduct(e.target.value)}
-                                value={selectedProductType}
+                        <div className="flex flex-col mt-4 bg-gray-200 rounded-lg p-2">
+                            <div className="flex flex-col">
+                                <label className='font-serif text-xl font-semibold'>Vörur</label>
+                                <select className='border border-blue rounded-lg h-10 w-2/5 mt-2 p-2'
+                                    onChange={(e) => handleChangeProduct(e.target.value)}
+                                    value={selectedProductType}
 
-                            >
-                                <option value="">Select type</option>
-                                <option value="cake">Kökur</option>
-                                <option value="bread">Brauð</option>
-                                <option value="minidonut">Minidonuts</option>
-                                <option value="other">Annað</option>
-                            </select>
+                                >
+                                    <option value="">Select type</option>
+                                    <option value="cake">Kökur</option>
+                                    <option value="bread">Brauð</option>
+                                    <option value="minidonut">Minidonuts</option>
+                                    <option value="other">Annað</option>
+                                </select>
+                            </div>
                             {selectedProductType === 'cake' && (
                                 <div className="flex flex-col mt-4">
                                     <label className='font-serif text-xl'>Kaka:</label>
-                                    <select className='border border-blue rounded-lg h-10 w-2/5 mt-2 p-2'
+                                    <select className='border border-blue rounded-lg h-10 w-2/5 p-2 mb-2'
                                         onChange={handleCakeChange}
                                         value={selectedCake}
                                         required
@@ -171,7 +196,7 @@ const AddOrder = () => {
                                     {selectedCake && (
                                         <>
                                             <div className="flex flex-col w-full mb-2">
-                                                <label className="text-white font-serif text-xl uppercase" htmlFor="size">Stærð:</label>
+                                                <label className="font-serif text-xl" htmlFor="size">Stærð:</label>
                                                 <select className="w-2/5 h-10 border border-blue rounded-lg font-serif text-lg" id="size" name="cake_size" onChange={handleSizeChange} value={cakeDetails.size} required>
                                                     <option value="">Veldu stærð</option>
                                                     {kokur.kokur.find(item => item.name === selectedCake)?.size.map((sizeItem) => (
@@ -183,7 +208,7 @@ const AddOrder = () => {
                                             </div>
                                             {kokur.kokur.find(item => item.name === selectedCake)?.fillings && (
                                                 <div className="flex flex-col w-full mb-2">
-                                                    <label className="text-white font-serif text-xl uppercase" htmlFor="filling">Fylling:</label>
+                                                    <label className="font-serif text-xl" htmlFor="filling">Fylling:</label>
                                                     <select className="w-2/5 h-10 mb-2 border border-blue rounded-lg font-serif text-lg" id="filling" name="filling" onChange={handleFillingChange} value={cakeDetails.filling}>
                                                         <option value="">Veldu fyllingu</option>
                                                         {kokur.kokur.find(item => item.name === selectedCake)?.fillings.map((filling) => (
@@ -226,6 +251,32 @@ const AddOrder = () => {
                                                     <input type="url" className="w-full h-12 mb-2 p-1 border-none font-serif text-lg placeholder-black" id="url" name="url" onChange={handleUrlChange} value={cakeDetails.url} placeholder="Sláðu inn slóð" />
                                                 </div>
                                             )}
+                                            {(selectedCake === 'Marsipantertur' || selectedCake === 'Smjörkremskaka') && (
+                                                    <>
+                                                        <div className="flex flex-col w-full mb-2">
+                                                            <label className="text-black font-serif text-lg" htmlFor="texti">Texti á köku:</label>
+                                                            <input 
+                                                                type="text" 
+                                                                className="w-2/5 h-12 mb-2 p-1 border border-blue rounded-lg font-serif text-lg placeholder-black" 
+                                                                id="texti" 
+                                                                name="texti" 
+                                                                onChange={handleTextChange} 
+                                                                value={selectedText}
+                                                            />
+                                                        </div>
+                                                        <div className="flex flex-col w-full mb-2">
+                                                            <label className="text-black font-serif text-lg" htmlFor="skreyting">Skreyting:</label>
+                                                            <input 
+                                                                type="skreyting" 
+                                                                className="w-2/5 h-12 mb-2 p-1 border border-blue rounded-lg font-serif text-lg placeholder-black" 
+                                                                id="skreyting" 
+                                                                name="skreyting" 
+                                                                onChange={handleSkreytingChange}
+                                                                value={selectedSkreyting}
+                                                            />
+                                                        </div>
+                                                    </>
+                                                )}
                                         </>
                                     )}
                                 </div>
@@ -263,7 +314,7 @@ const AddOrder = () => {
 
                 {/* Products List */}
                 {/* Products List */}
-                <div className="products-list md:w-1/3 mt-6 md:mt-0 md:ml-6">
+                <div className="products-list bg-gray-200 rounded-lg p-2 md:w-1/3 mt-6 md:mt-0 md:ml-6">
                     <h2 className="text-2xl font-bold mb-4">Pöntun</h2>
                     {products.length > 0 ? (
                         <div className="flex flex-col w-full max-w-4xl border-2 border-blue-700 rounded-lg p-4 space-y-4 bg-white shadow-lg">

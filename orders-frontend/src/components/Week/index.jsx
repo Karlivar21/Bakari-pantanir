@@ -11,7 +11,7 @@ const WeekView = ({ weekOrders }) => {
             switch (product.type) {
                 case 'cake':
                     const cake = product.details;
-                    products.push(`${cake.cake} - Stærð: ${cake.size}${cake.filling ? `, Fylling: ${cake.filling}` : ''}${cake.bottom ? `, Botn: ${cake.bottom}` : ''}${cake.smjorkrem ? `, Smjörkrem: ${cake.smjorkrem}` : ''}`);
+                    products.push(`${cake.cake} - Stærð: ${cake.size}`);
                     break;
                 case 'bread':
                     const bread = product.details;
@@ -34,9 +34,9 @@ const WeekView = ({ weekOrders }) => {
     };
 
     return (
-        <div className="flex flex-wrap items-center p-6">
+        <div className="flex flex-wrap justify-center">
             {weekOrders.weekDays && weekOrders.weekDays.map((day, dayIndex) => (
-                <div key={day} className="flex flex-col min-h-40 items-center border w-1/3 p-4">
+                <div key={day} className="flex flex-col min-h-80 items-center border w-1/3 p-4">
                     <h2 className='font-serif text-xl font-bold'>{day}</h2>
                     <h3 className='font-serif text-lg'>{weekOrders.dates[dayIndex]}</h3>
                     {weekOrders.ordersByDay[day].length > 0 ? (
@@ -46,7 +46,7 @@ const WeekView = ({ weekOrders }) => {
                                     {formatProducts(order).map((product, productIndex) => (
                                         <div
                                             onClick={() => handleOrderClick(order)} // Ensure it's a function that gets called on click
-                                            className='font-serif border-2 border-blue-500 rounded-lg p-1 cursor-pointer'
+                                            className='font-serif border-2 border-blue-500 rounded-lg p-1 cursor-pointer m-1'
                                             key={productIndex}
                                         >
                                             {product}
@@ -56,7 +56,7 @@ const WeekView = ({ weekOrders }) => {
                             ))}
                         </ul>
                     ) : (
-                        <p className='font-serif text-lg'>No orders</p>
+                        <p className='font-serif text-lg'>Engar pantanir</p>
                     )}
                 </div>
             ))}

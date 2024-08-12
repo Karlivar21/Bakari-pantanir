@@ -50,12 +50,12 @@ const OrderList = () => {
     };
 
     return (
-        <div className="flex min-h-screen">
-            <Sidebar/> {/* Sidebar takes 20% of the width */}
-            <div className="flex-1 p-6">
+        <div className="flex">
+            <Sidebar/> 
+            <div className="flex flex-col p-6 w-full overflow-hidden"> {/* Added overflow-hidden */}
                 <h1 className="text-3xl font-bold mb-4">Allar pantanir</h1>
-                <div className="overflow-x-auto">
-                    <table className="min-w-full divide-y divide-gray-200 bg-white">
+                <div className="overflow-x-auto w-full"> {/* Changed width to full */}
+                    <table className="w-full divide-y divide-gray-200 bg-white"> {/* Changed width to full */}
                         <thead className="bg-gray-100">
                             <tr>
                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
@@ -93,6 +93,7 @@ const OrderList = () => {
             </div>
         </div>
     );
+    
 };
 
 export default OrderList;
