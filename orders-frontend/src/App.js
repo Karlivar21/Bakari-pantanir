@@ -10,6 +10,7 @@ import { AuthProvider } from './auth/AuthContext'; // Import only the AuthProvid
 import PrivateRoute from './routes/PrivateRoute';
 import AuthInitializer from './auth/AuthInit'; // Import AuthInitializer
 import OrderView from './components/Order';
+import Comment from './components/Comment';
 import './index.css'; // Import Tailwind CSS
 
 const App = () => {
@@ -26,6 +27,7 @@ const App = () => {
                                 <Route path="/supuplan" element={<SoupPlanAdmin />} />
                                 <Route path="/add-order" element={<AddOrder />} />
                                 <Route path="/order/:orderId" element={<OrderView />} />
+                                <Route path="/comment" element={<Comment />} />
                             </Route>
                         </Routes>
                     </div>

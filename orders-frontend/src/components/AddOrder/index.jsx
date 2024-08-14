@@ -120,19 +120,23 @@ const AddOrder = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const newOrder = {
-            id: uuidv4(),
-            name,
-            phone,
-            email,
-            date,
-            products,
-            user_message: userMessage,
-            payed
-        };
+        const formData = new FormData();
+        formData.append('id', uuidv4());
+        formData.append('name', name);
+        formData.append('phone', phone);
+        formData.append('email', email);
+        formData.append('date', date);
+        formData.append('products', JSON.stringify(products));
+        formData.append('user_message', userMessage);
+        formData.append('payed', false);
 
         try {
-            await axios.post('https://api.kallabakari.is/api/orders', newOrder);
+            await axios.post('https://api.kallabakari.is/api/orders', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+            alert('Order added successfully');
             navigate('/');
         } catch (error) {
             console.error('Error adding order:', error);

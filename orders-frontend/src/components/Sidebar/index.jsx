@@ -16,36 +16,36 @@ const Sidebar = () => {
     };
 
     return (
-        <div className="flex flex-col bg-gray-700 w-1/6 min-h-screen">
-            <h2 className='font-serif p-2 text-white font-bold text-2xl mb-5'>Pantanakerfi</h2>
+        <div className="flex flex-col bg-gray-700 w-1/4 md:w-1/6 min-h-screen">
+            <h2 className='font-serif p-2 text-white font-bold text-lg md:text-2xl mb-5'>Pantanakerfi</h2>
             <ul className="flex-grow">
                 <li
-                    className='font-serif text-white text-xl border p-2 cursor-pointer hover:bg-gray-600'
+                    className='font-serif text-white text-lg md:text-xl border p-2 cursor-pointer hover:bg-gray-600'
                     onClick={() => handleNavigation('/')}
                 >
                     Heim
                 </li>
                 <li
-                    className='font-serif text-white text-xl border p-2 cursor-pointer hover:bg-gray-600'
+                    className='font-serif text-white text-lg md:text-xl border p-2 cursor-pointer hover:bg-gray-600'
                     onClick={() => handleNavigation('/orders')}
                 >
                     Pantanir
                 </li>
                 <li
-                    className='font-serif text-white text-xl border p-2 cursor-pointer hover:bg-gray-600'
+                    className='font-serif text-white text-lg md:text-xl border p-2 cursor-pointer hover:bg-gray-600'
                     onClick={() => handleNavigation('/supuplan')}
                 >
                     Súpuplan
                 </li>
                 <li
-                    className='font-serif text-white text-xl border p-2 cursor-pointer hover:bg-gray-600'
-                    onClick={() => handleNavigation('/contact')}
+                    className='font-serif text-white text-lg md:text-xl border p-2 cursor-pointer hover:bg-gray-600'
+                    onClick={() => handleNavigation('/comment')}
                 >
-                    Starfsmenn
+                    Athugasemdir
                 </li>
             </ul>
             <button
-                className='bg-blue-600 text-white text-xl mt-auto py-2 px-4 rounded-lg m-4'
+                className='bg-blue-600 text-white text-lg md:text-xl mt-auto py-2 px-4 rounded-lg m-4'
                 onClick={handleLogout}
             >
                 Skrá út

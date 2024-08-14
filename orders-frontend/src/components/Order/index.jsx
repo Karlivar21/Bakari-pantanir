@@ -71,8 +71,8 @@ const OrderView = () => {
     return (
         <div className="flex">
             <Sidebar />
-            <div className="flex flex-col items-center p-6">
-                <h2 className="text-2xl font-serif font-bold mb-4">Order Details</h2>
+            <div className="flex flex-col items-center ml-12 mt-5 p-6">
+                <h2 className="text-2xl font-serif font-bold mb-4">Pöntunar upplýsingar</h2>
                 <div className="rounded-lg p-4 bg-white shadow-lg">
                     <div className="flex flex-col border border-blue-700 rounded-lg p-4 space-y-4 bg-gray-100">
                         <div className="flex-1 bg-gray-200 p-4 rounded-lg">
@@ -88,11 +88,11 @@ const OrderView = () => {
                                 <p className="font-serif text-lg" key={index}>{product}</p>
                             ))}
                         </div>
-                        {order.details && order.details.image && (
+                        {order.imageUrl && (
                             <div className="flex-1 bg-gray-200 p-4 rounded-lg">
                                 <h3 className="text-xl font-serif font-bold mb-2">Order Image</h3>
                                 <img 
-                                    src={`https://api.kallabakari.is/uploads/${order.details.image}`} 
+                                    src={`https://api.kallabakari.is/uploads/${order.imageUrl}`} 
                                     alt="Order" 
                                     className="max-w-full h-auto"
                                 />

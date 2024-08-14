@@ -76,17 +76,17 @@ const SoupPlanAdmin = () => {
   return (
     <div className='flex min-h-screen'>
       <Sidebar/> {/* Sidebar takes 20% of the width */}
-      <div className='flex flex-col p-4 items-center'>
+      <div className='flex flex-col p-4 items-center bg-gray-100 rounded-lg m-10'>
         <h2 className='text-2xl font-serif font-bold mb-4'>Súpuplan</h2>
         <div className="week-inputs mb-4">
-          <label className='mr-2'>Start Date:</label>
+          <label className='mr-2 font-serif text-lg'>Start Date:</label>
           <input
             type="date"
             value={soupPlan.week.startDate}
             onChange={e => handleWeekChange('startDate', e.target.value)}
             className='border border-gray-300 rounded-md px-2 py-1'
           />
-          <label className='ml-4 mr-2'>End Date:</label>
+          <label className='ml-4 mr-2 font-serif text-lg'>End Date:</label>
           <input
             type="date"
             value={soupPlan.week.endDate}
@@ -96,7 +96,7 @@ const SoupPlanAdmin = () => {
         </div>
         {Object.keys(oldsoupPlan).filter(day => day !== 'week').map(day => (
           <div className="soup mb-4" key={day}>
-            <label className='mr-2'>{day}:</label>
+            <label className='mr-2 font-serif text-lg'>{day}:</label>
             <select
               value={soupPlan[day]}
               onChange={e => handleChange(day, e.target.value)}
