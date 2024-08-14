@@ -51,7 +51,7 @@ const WeekView = ({ weekOrders }) => {
                                     {formatProducts(order).map((product, productIndex) => (
                                         <div
                                             onClick={() => handleOrderClick(order)} // Ensure it's a function that gets called on click
-                                            className='flex items-center justify-center font-serif text-xs p-0 text-white border-2 border-blue-500 bg-blue-500 rounded-lg p-1 cursor-pointer m-1'
+                                            className='flex items-center justify-center font-serif text-xs p-0 md:text-lg p-1 text-white bg-blue-500 rounded-lg cursor-pointer m-1 hover:bg-blue-700'
                                             key={productIndex}
                                         >
                                             {product}

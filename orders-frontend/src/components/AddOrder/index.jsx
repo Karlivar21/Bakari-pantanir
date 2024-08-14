@@ -152,18 +152,30 @@ const AddOrder = () => {
                     <h1 className="text-3xl font-bold font-serif mb-4">Bæta við pöntun</h1>
                     <form onSubmit={handleSubmit} className="flex flex-col w-full">
                         <div className="flex flex-wrap bg-gray-200 rounded-lg p-2">
-                            <label className='mt-4 font-serif text-xl mr-2'>Nafn</label>
-                            <input className='border border-blue rounded-lg h-8 w-1/3 mt-2 p-2 mr-3' type="text" value={name} onChange={(e) => setName(e.target.value)} required />
-                            <label className='mt-4 font-serif text-xl mr-2'>Símanúmer</label>
-                            <input className='border border-blue rounded-lg h-8 w-1/3 mt-2 p-2' type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} required />
-                            <label className='mt-4 font-serif text-xl'>Netfang</label>
-                            <input className='border border-blue rounded-lg h-8 w-1/3 mt-2 p-2' type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-                            <label className='mt-4 font-serif text-xl'>Dagsetning</label>
-                            <input className='border border-blue rounded-lg h-8 w-1/3 mt-2 p-2' type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
-                            <label className='mt-4 font-serif text-xl'>Greitt?</label>
-                            <input className='border border-blue rounded-lg h-8 w-1/5 mt-2 p-2' type="checkbox" value={payed} onChange={(e) => setPayed(e.target.checked)} />
-                            <label className='mt-4 font-serif text-xl mr-3'>Athugasemd</label>
-                            <textarea className='border border-blue rounded-lg h-24 w-2/4 mt-2 p-2' value={userMessage} onChange={(e) => setUserMessage(e.target.value)} />
+                            <div className="flex flex-row items-center w-1/2">
+                                <label className='mt-4 font-serif text-xl m-2'>Nafn</label>
+                                <input className='border border-blue rounded-lg h-8 w-full mt-2 p-2 mr-3' type="text" value={name} onChange={(e) => setName(e.target.value)} required />
+                            </div>
+                            <div className="flex flex-row w-1/2">
+                                <label className='mt-4 font-serif items-center text-xl m-2'>Símanúmer</label>
+                                <input className='border border-blue rounded-lg h-8 w-full mt-2 p-2' type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} required />
+                            </div>
+                            <div className="flex flex-row w-1/2">
+                                <label className='mt-2 font-serif text-xl m-2'>Netfang</label>
+                                <input className='border border-blue rounded-lg h-8 w-full mt-2 p-2' type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                            </div>
+                            <div className="flex flex-row w-1/2">
+                                <label className='mt-2 font-serif text-xl m-2'>Dagsetning</label>
+                                <input className='border border-blue rounded-lg h-8 w-full mt-2 p-2' type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
+                            </div>
+                            <div className="flex flex-row w-1/3">
+                                <label className='mt-4 font-serif text-xl m-2'>Greitt?</label>
+                                <input className='border border-blue rounded-lg h-8 w-1/5 mt-2 p-2' type="checkbox" value={payed} onChange={(e) => setPayed(e.target.checked)} />
+                            </div>
+                            <div className="flex flex-row w-2/3">
+                                <label className='mt-4 font-serif text-xl mr-3'>Athugasemd</label>
+                                <textarea className='border border-blue rounded-lg h-24 w-full mt-2 p-2' value={userMessage} onChange={(e) => setUserMessage(e.target.value)} />
+                            </div>
                         </div>
                         {/* Add Product Section */}
                         <div className="flex flex-col mt-4 bg-gray-200 rounded-lg p-2">
@@ -308,11 +320,11 @@ const AddOrder = () => {
                             )}
                         </div>
 
-                        <button type="button" className="flex font-serif text-lg mt-5 items-center justify-center h-8 w-25 border-2 border-blue-500 rounded-lg" onClick={handleAddProduct}>
+                        <button type="button" className="flex font-serif text-white text-lg mt-5 items-center justify-center h-8 w-25 bg-blue-500 rounded-lg hover:bg-blue-600" onClick={handleAddProduct}>
                             Bæta við Vöru
                         </button>
 
-                        <button type="submit" className="flex font-serif text-lg mt-5 items-center justify-center h-8 w-25 border-2 border-blue-500 rounded-lg">Bæta við Pöntun</button>
+                        <button type="submit" className="flex font-serif text-white text-lg mt-5 items-center justify-center h-8 w-25 bg-blue-500 rounded-lg hover:bg-blue-600">Bæta við Pöntun</button>
                     </form>
                 </div>
 
