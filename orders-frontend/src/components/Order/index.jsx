@@ -11,7 +11,7 @@ const OrderView = () => {
     useEffect(() => {
         const fetchOrders = async () => {
             try {
-                const response = await axios.get('https://api.kallabakari.is/api/orders');
+                const response = await axios.get('http://localhost:5010/api/orders');
                 console.log('OrderId:', orderId); // Debugging log
                 const foundOrder = response.data.find((order) => order.id === orderId);
                 setOrder(foundOrder);
@@ -46,7 +46,11 @@ const OrderView = () => {
             switch (product.type) {
                 case 'cake':
                     const cake = product.details;
-                    products.push(`${cake.cake} - Stærð: ${cake.size}${cake.filling ? `, Fylling: ${cake.filling}` : ''}${cake.bottom ? `, Botn: ${cake.bottom}` : ''}${cake.smjorkrem ? `, Smjörkrem: ${cake.smjorkrem}` : ''}${cake.text? `, Texti: ${cake.text}` : ''}${cake.skreyting? `, Skreyting: ${cake.skreyting}` : ''}`);
+                    if (cake.cake === 'Sykurmassamynd') {
+                        products.push(`${cake.cake}`);
+                    } else {
+                        products.push(`${cake.cake} - Stærð: ${cake.size}${cake.filling ? `, Fylling: ${cake.filling}` : ''}${cake.bottom ? `, Botn: ${cake.bottom}` : ''}${cake.smjorkrem ? `, Smjörkrem: ${cake.smjorkrem}` : ''}${cake.text? `, Texti: ${cake.text}` : ''}${cake.skreyting? `, Skreyting: ${cake.skreyting}` : ''}`);
+                    }
                     break;
                 case 'bread':
                     const bread = product.details;

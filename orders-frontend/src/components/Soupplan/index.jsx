@@ -7,7 +7,9 @@ const soupOptions = [
   'Brauðsúpa',
   'Mexíkósk Kjúklingasúpa',
   'Tómatsúpa',
-  'Rjómalöguð Sveppasúpa'
+  'Rjómalöguð Sveppasúpa',
+  'Blaðlaukssúpa',
+  'Gulrótarsúpa'
 ];
 
 const SoupPlanAdmin = () => {

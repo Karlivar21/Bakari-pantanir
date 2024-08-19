@@ -51,7 +51,7 @@ const AddOrder = () => {
                 details = { quantity: quantity };
                 break;
             case 'other':
-                details = { other: productType };
+                details = { other: productType, quantity: quantity };
                 break;
             default:
                 console.log('Unknown product type:', selectedProductType);
@@ -315,8 +315,11 @@ const AddOrder = () => {
                             {selectedProductType === 'other' && (
                                 <div className="flex flex-col mt-4">
                                     <label className='font-serif text-xl'>Annað</label>
-                                    <input className='border border-blue rounded-lg h-8 w-2/5 mt-2 p-2' type="text" value={productType} onChange={(e) => setProductType(e.target.value)} required />
+                                    <input className='border border-blue rounded-lg h-8 w-2/5 mt-2 p-2' placeholder='Skrifaðu niður vöru' type="text" value={productType} onChange={(e) => setProductType(e.target.value)} required />
+                                    <label className='font-serif text-xl mt-2'>Magn:</label>
+                                    <input className='border border-blue rounded-lg h-8 w-2/5 mt-2 p-2' type="number" placeholder='Veldu magn' onChange={(e) => setQuantity(e.target.value)} value={quantity} required />
                                 </div>
+
                             )}
                         </div>
 
