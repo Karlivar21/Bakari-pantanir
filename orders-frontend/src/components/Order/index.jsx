@@ -11,7 +11,7 @@ const OrderView = () => {
     useEffect(() => {
         const fetchOrders = async () => {
             try {
-                const response = await axios.get('http://localhost:5010/api/orders');
+                const response = await axios.get('http://api.kallabakari.is/api/orders');
                 console.log('OrderId:', orderId); // Debugging log
                 const foundOrder = response.data.find((order) => order.id === orderId);
                 setOrder(foundOrder);
