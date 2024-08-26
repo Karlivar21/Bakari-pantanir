@@ -4,12 +4,19 @@ import Sidebar from '../Sidebar';
 
 const soupOptions = [
   'Aspassúpa',
-  'Brauðsúpa',
-  'Mexíkósk Kjúklingasúpa',
-  'Tómatsúpa',
-  'Rjómalöguð Sveppasúpa',
   'Blaðlaukssúpa',
-  'Gulrótarsúpa'
+  'Blómkálssúpa',
+  'Brokkólísúpa',
+  'Brauðsúpa',
+  'Fiskisúpa',
+  'Gulrótarsúpa',
+  'Graskerssúpa',
+  'Íslensk Kjötsúpa',
+  'Mexíkósk Kjúklingasúpa',
+  'Rjómalöguð Sveppasúpa',
+  'Sætkartöflusúpa',
+  'Tómatsúpa',
+  'Tælensk Núðlusúpa',
 ];
 
 const SoupPlanAdmin = () => {
