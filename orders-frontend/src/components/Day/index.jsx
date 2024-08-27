@@ -32,6 +32,52 @@ const DayView = ({ orders, date }) => {
         return products;
     };
 
+    const formatDate = (date) => {
+        const newdate = date.split('/');
+        let month = '';
+        switch (newdate[1]) {
+            case '01':
+                month = 'janúar';
+                break;
+            case '02':
+                month = 'febrúar';
+                break;
+            case '03':
+                month = 'mars';
+                break;
+            case '04':
+                month = 'apríl';
+                break;
+            case '05':
+                month = 'maí';
+                break;
+            case '06':
+                month = 'júní';
+                break;
+            case '07':
+                month = 'júlí';
+                break;
+            case '08':
+                month = 'ágúst';
+                break;
+            case '09':
+                month = 'september';
+                break;
+            case '10':
+                month = 'október';
+                break;
+            case '11':
+                month = 'nóvember';
+                break;
+            case '12':
+                month = 'desember';
+                break;
+            default:
+                month = 'janúar';
+        }
+        return `${newdate[0]}. ${month}`;
+    };
+
     const handleOrderClick = (uniqueId) => {
         console.log('Order clicked:', uniqueId); // Debugging log
         navigate(`/order/${uniqueId}`);
@@ -39,7 +85,7 @@ const DayView = ({ orders, date }) => {
 
     return (
         <div className="flex flex-col items-center p-6">
-            <h2 className="text-2xl font-bold mb-4">{date}</h2>
+            <h2 className="text-2xl text-white font-bold mb-4">{formatDate(date)}</h2>
             {dayOrders.length > 0 ? (
                 <div className="flex flex-col w-full max-w-4xl border-2 border-blue-700 rounded-lg p-4 space-y-4 bg-gray-100 shadow-lg">
                     {dayOrders.map((order, index) => (

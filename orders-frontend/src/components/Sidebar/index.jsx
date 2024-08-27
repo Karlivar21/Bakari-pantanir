@@ -16,29 +16,29 @@ const Sidebar = () => {
     };
 
     return (
-        <div className="flex flex-col bg-white w-1/4 md:w-1/6 min-h-screen border-r border-black">
-            <h2 className='font-serif p-2 text-black font-bold text-lg md:text-2xl mb-5'>Pantanakerfi</h2>
+        <div className="flex flex-col bg-gray-800 w-1/4 md:w-1/6 min-h-screen border-r border-black">
+            <h2 className='font-serif p-3 text-white font-semibold text-lg md:text-4xl mb-5'>Pantanakerfi</h2>
             <ul className="flex-grow">
                 <li
-                    className='font-serif text-black text-lg md:text-xl border-t border-gray-500 p-2 cursor-pointer hover:bg-gray-300'
+                    className='font-serif bg-white text-black text-lg md:text-xl border-t border-gray-500 p-2 cursor-pointer hover:bg-blue-600'
                     onClick={() => handleNavigation('/')}
                 >
                     Heim
                 </li>
                 <li
-                    className='font-serif text-black text-lg md:text-xl border-t border-gray-500 p-2 cursor-pointer hover:bg-gray-300'
+                    className='font-serif bg-white text-black text-lg md:text-xl border-t border-gray-500 p-2 cursor-pointer hover:bg-blue-600'
                     onClick={() => handleNavigation('/orders')}
                 >
                     Pantanir
                 </li>
                 <li
-                    className='font-serif text-black text-lg md:text-xl border-t border-gray-500 p-2 cursor-pointer hover:bg-gray-300'
+                    className='font-serif bg-white text-black text-lg md:text-xl border-t border-gray-500 p-2 cursor-pointer hover:bg-blue-600'
                     onClick={() => handleNavigation('/supuplan')}
                 >
                     Súpuplan
                 </li>
                 <li
-                    className='font-serif text-black text-lg md:text-xl border-y border-gray-500 p-2 cursor-pointer hover:bg-gray-300'
+                    className='font-serif bg-white text-black text-lg md:text-xl border-y border-gray-500 p-2 cursor-pointer hover:bg-blue-600'
                     onClick={() => handleNavigation('/comment')}
                 >
                     Athugasemdir

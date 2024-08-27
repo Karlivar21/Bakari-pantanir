@@ -87,14 +87,14 @@ const Home = () => {
     };
 
     return (
-        <div className="flex min-h-screen">
+        <div className="flex min-h-screen bg-gray-800">
             <Sidebar className="w-1/5" /> {/* Sidebar takes 20% of the width */}
             <div className="flex-1 p-4">
-                <div className="flex justify-end mb-5">
+                <div className="flex justify-center mb-5">
                     <select
                         onChange={(e) => setView(e.target.value)}
                         value={view}
-                        className="text-blue-500 text-lg w-24 rounded-lg border border-gray-300 p-1"
+                        className="text-blue-500 text-lg w-36 rounded-lg border border-gray-300 p-1"
                     >
                         <option value="day">Day</option>
                         <option value="week">Week</option>

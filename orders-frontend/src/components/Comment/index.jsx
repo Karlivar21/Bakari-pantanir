@@ -24,10 +24,10 @@ const Comment = () => {
 
 
     return (
-        <div className="flex">
+        <div className="flex bg-gray-800">
             <Sidebar/>
             <div className="flex flex-col p-6 w-full overflow-hidden">
-                <h1 className="text-3xl font-bold mb-4">Allar athugasemdir</h1>
+                <h1 className="text-3xl text-white font-serif font-bold mb-4">Athugasemdir</h1>
                 <div className="overflow-x-auto w-full">
                     <table className="w-full divide-y divide-gray-200 bg-white">
                         <thead className="bg-gray-100">

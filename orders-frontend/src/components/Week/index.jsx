@@ -41,7 +41,7 @@ const WeekView = ({ weekOrders }) => {
     return (
         <div className="flex flex-wrap justify-center">
             {weekOrders.weekDays && weekOrders.weekDays.map((day, dayIndex) => (
-                <div key={day} className="flex flex-col min-h-32 md:min-h-80 items-center border w-1/3 p-4">
+                <div key={day} className="flex bg-white flex-col m-3 min-h-32 md:min-h-80 items-center border rounded-lg w-1/4 p-4">
                     <h2 className='font-serif text-sm md:text-xl font-bold'>{day}</h2>
                     <h3 className='font-serif text-md md:text-lg'>{weekOrders.dates[dayIndex]}</h3>
                     {weekOrders.ordersByDay[day].length > 0 ? (

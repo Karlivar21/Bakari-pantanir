@@ -24,6 +24,10 @@ const OrderList = () => {
         navigate('/add-order');
     };
 
+    const handleOrderClick = (order) => {
+        navigate(`/order/${order.id}`);
+    };
+
     const formatProducts = (order) => {
         const products = [];
     
@@ -50,10 +54,10 @@ const OrderList = () => {
     };
 
     return (
-        <div className="flex">
+        <div className="flex bg-gray-800">
             <Sidebar/> 
             <div className="flex flex-col p-6 w-full overflow-hidden"> {/* Added overflow-hidden */}
-                <h1 className="text-3xl font-bold mb-4">Allar pantanir</h1>
+                <h1 className="text-3xl text-white font-serif font-bold mb-4">Allar pantanir</h1>
                 <div className="overflow-x-auto w-full"> {/* Changed width to full */}
                     <table className="w-full divide-y divide-gray-200 bg-white"> {/* Changed width to full */}
                         <thead className="bg-gray-100">
@@ -62,23 +66,17 @@ const OrderList = () => {
                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone</th>
                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Products</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Message</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Details</th>
                             </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-200">
-                            {orders.map((order) => (
+                            {orders.slice().reverse().map((order) => (
                                 <tr key={order._id}>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{order.name}</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{order.phone}</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{order.email}</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{new Date(order.date).toLocaleDateString()}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        {formatProducts(order).map((product, index) => (
-                                            <div key={index} className="text-sm">{product}</div>
-                                        ))}
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{order.user_message ? order.user_message : 'No Message'}</td>
+                                    <button className="px-2 py-2 mt-2 bg-blue-500 text-md text-white font-serif rounded-lg" onClick={() => handleOrderClick(order)}>Order Details</button>
                                 </tr>
                             ))}
                         </tbody>

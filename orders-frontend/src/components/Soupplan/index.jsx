@@ -83,11 +83,11 @@ const SoupPlanAdmin = () => {
   };
 
   return (
-    <div className='flex min-h-screen'>
+    <div className='flex min-h-screen bg-gray-800'>
       <Sidebar/> {/* Sidebar takes 20% of the width */}
-      <div className='flex flex-col p-4 items-center bg-gray-100 rounded-lg m-10'>
+      <div className='flex flex-col h-4/5 p-4 items-center bg-gray-100 rounded-lg ml-40 mt-20'>
         <h2 className='text-2xl font-serif font-bold mb-4'>Súpuplan</h2>
-        <div className="week-inputs mb-4">
+        <div className="mb-4">
           <label className='mr-2 font-serif text-lg'>Start Date:</label>
           <input
             type="date"
