@@ -76,7 +76,7 @@ const OrderList = () => {
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{order.phone}</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{order.email}</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{new Date(order.date).toLocaleDateString()}</td>
-                                    <button className="px-2 py-2 mt-2 bg-blue-500 text-md text-white font-serif rounded-lg" onClick={() => handleOrderClick(order)}>Order Details</button>
+                                    <td className="px-2 py-2 mt-2 bg-blue-500 text-md text-white font-serif rounded-lg" onClick={() => handleOrderClick(order)}>Order Details</td>
                                 </tr>
                             ))}
                         </tbody>

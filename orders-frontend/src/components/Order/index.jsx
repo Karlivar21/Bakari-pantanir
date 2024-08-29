@@ -85,7 +85,7 @@ const OrderView = () => {
                             <p className="font-serif">Netfang: {order.email}</p>
                             <p className="font-serif">Dagsetning: {new Date(order.date).toLocaleDateString()}</p>
                             <p className='font-serif'>Greitt: {order.payed ? 'Já' : 'Nei'}</p>
-                            <p className="font-serif">Athugasemdir: {order.comments}</p>
+                            <p className="font-serif">Athugasemdir: {order.user_message}</p>
                         </div>
                         <div className="flex-1 bg-gray-200 p-4 rounded-lg">
                             {formatProducts(order).map((product, index) => (
@@ -95,11 +95,6 @@ const OrderView = () => {
                         {order.imageUrl && (
                             <div className="flex-1 bg-gray-200 p-4 rounded-lg">
                                 <h3 className="text-xl font-serif font-bold mb-2">Order Image</h3>
-                                <img 
-                                    src={`https://api.kallabakari.is/uploads/${order.imageUrl}`} 
-                                    alt="Order" 
-                                    className="max-w-full h-auto"
-                                />
                             </div>
                         )}
                     </div>

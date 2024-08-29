@@ -108,10 +108,12 @@ const AddOrder = () => {
     };
 
     const handleTextChange = (e) => {
+        setSelectedText(e.target.value);
         setCakeDetails(prevDetails => ({ ...prevDetails, text: e.target.value }));
     };
 
     const handleSkreytingChange = (e) => {
+        setSelectedSkreyting(e.target.value);
         setCakeDetails(prevDetails => ({ ...prevDetails, skreyting: e.target.value }));
     };
 
