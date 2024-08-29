@@ -73,10 +73,10 @@ const OrderView = () => {
     }
 
     return (
-        <div className="flex">
+        <div className="flex bg-gray-800">
             <Sidebar />
             <div className="flex flex-col items-center ml-12 mt-5 p-6">
-                <h2 className="text-2xl font-serif font-bold mb-4">Pöntunar upplýsingar</h2>
+                <h2 className="text-2xl text-white font-serif font-bold mb-4">Pöntunar upplýsingar</h2>
                 <div className="rounded-lg p-4 bg-white shadow-lg">
                     <div className="flex flex-col border border-blue-700 rounded-lg p-4 space-y-4 bg-gray-100">
                         <div className="flex-1 bg-gray-200 p-4 rounded-lg">

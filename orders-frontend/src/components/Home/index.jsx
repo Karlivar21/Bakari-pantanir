@@ -104,7 +104,7 @@ const Home = () => {
                 <div className="flex flex-col items-center">
                     {view === 'day' && <DayView orders={orders} date={selectedDate.toLocaleDateString('is-IS')} />}
                     {view === 'week' && <WeekView weekOrders={weekOrders} />}
-                    {view === 'month' && <MonthView orders={orders} />}
+                    {view === 'month' && <MonthView orders={orders}/>}
                 </div>
                 <div className="flex justify-between mt-5">
                     {view === 'day' && (
