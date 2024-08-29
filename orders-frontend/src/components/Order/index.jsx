@@ -61,7 +61,7 @@ const OrderView = () => {
                     products.push(`Minidonuts - Magn: ${minidonut.quantity}`);
                     break;
                 default:
-                    products.push(`Unknown product type: ${product.type}`);
+                    products.push(`${product.details.other} - Magn: ${product.details.quantity}`);
             }
         });
 
