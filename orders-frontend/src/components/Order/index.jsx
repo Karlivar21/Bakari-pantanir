@@ -72,6 +72,7 @@ const OrderView = () => {
         return <p>Loading order details...</p>; // Show a loading message while the order is being fetched
     }
 
+
     return (
         <div className="flex bg-gray-800">
             <Sidebar />
@@ -92,9 +93,15 @@ const OrderView = () => {
                                 <p className="font-serif text-lg" key={index}>{product}</p>
                             ))}
                         </div>
-                        {order.imageUrl && (
+                        {order.image && (
                             <div className="flex-1 bg-gray-200 p-4 rounded-lg">
-                                <h3 className="text-xl font-serif font-bold mb-2">Order Image</h3>
+                                        <a 
+                                            href={`https://api.kallabakari.is/${order.image}`} // Corrected URL to point to full image path
+                                            download={order.image.split('/').pop()} // Extracts filename from the URL and uses it as the download name
+                                            className='flex bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600'
+                                        >
+                                            Download Image
+                                        </a>
                             </div>
                         )}
                     </div>
