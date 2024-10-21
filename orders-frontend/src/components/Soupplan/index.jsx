@@ -13,6 +13,7 @@ const soupOptions = [
   'Graskerssúpa',
   'Íslensk Kjötsúpa',
   'Mexíkósk Kjúklingasúpa',
+  'Paprikusúpa',
   'Rjómalöguð Sveppasúpa',
   'Sætkartöflusúpa',
   'Tómatsúpa',
