@@ -87,10 +87,10 @@ const Home = () => {
     };
 
     return (
-        <div className="flex min-h-screen bg-gray-800">
+        <div className="flex min-h-screen">
             <Sidebar className="w-1/5" /> {/* Sidebar takes 20% of the width */}
             <div className="flex-1 p-4">
-                <div className="flex justify-center mb-5">
+                <div className="flex bg-white justify-center mb-5">
                     <select
                         onChange={(e) => setView(e.target.value)}
                         value={view}
@@ -100,6 +100,10 @@ const Home = () => {
                         <option value="week">Week</option>
                         <option value="month">Month</option>
                     </select>
+
+                    <div className="flex items-center ml-5">
+                        
+                    </div>
                 </div>
                 <div className="flex flex-col items-center">
                     {view === 'day' && <DayView orders={orders} date={selectedDate.toLocaleDateString('is-IS')} />}

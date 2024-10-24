@@ -35,6 +35,52 @@ const OrderView = () => {
         }
     };
 
+    const formatDate = (date) => {
+        const newdate = date.split('/');
+        let month = '';
+        switch (newdate[1]) {
+            case '01':
+                month = 'janúar';
+                break;
+            case '02':
+                month = 'febrúar';
+                break;
+            case '03':
+                month = 'mars';
+                break;
+            case '04':
+                month = 'apríl';
+                break;
+            case '05':
+                month = 'maí';
+                break;
+            case '06':
+                month = 'júní';
+                break;
+            case '07':
+                month = 'júlí';
+                break;
+            case '08':
+                month = 'ágúst';
+                break;
+            case '09':
+                month = 'september';
+                break;
+            case '10':
+                month = 'október';
+                break;
+            case '11':
+                month = 'nóvember';
+                break;
+            case '12':
+                month = 'desember';
+                break;
+            default:
+                month = 'janúar';
+        }
+        return `${newdate[0]}. ${month}`;
+    };
+
     const formatProducts = (order) => {
         if (!order || !order.products) {
             return []; // Return an empty array if order or order.products is undefined
@@ -84,7 +130,7 @@ const OrderView = () => {
                             <p className="font-semibold font-serif text-lg">{order.name}</p>
                             <p className="font-serif">Símanúmer: {order.phone}</p>
                             <p className="font-serif">Netfang: {order.email}</p>
-                            <p className="font-serif">Dagsetning: {new Date(order.date).toLocaleDateString()}</p>
+                            <p className="font-serif">Dagsetning: {formatDate(new Date(order.date).toLocaleDateString())}</p>
                             <p className='font-serif'>Greitt: {order.payed ? 'Já' : 'Nei'}</p>
                             <p className="font-serif">Athugasemdir: {order.user_message}</p>
                         </div>

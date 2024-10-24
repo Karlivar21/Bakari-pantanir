@@ -16,29 +16,29 @@ const Sidebar = () => {
     };
 
     return (
-        <div className="flex flex-col bg-gray-800 w-1/4 md:w-1/6 min-h-screen border-r border-black">
+        <div className="flex flex-col bg-zinc-900 w-1/4 md:w-1/6 min-h-screen border-r border-black">
             <h2 className='font-serif p-3 text-white font-semibold text-lg md:text-4xl mb-5'>Pantanakerfi</h2>
             <ul className="flex-grow">
                 <li
-                    className='font-serif bg-white text-black text-lg md:text-xl border-t border-gray-500 p-2 cursor-pointer hover:bg-blue-600'
+                    className='font-serif text-white text-lg md:text-xl border-t border-gray-500 p-2 cursor-pointer hover:bg-blue-600'
                     onClick={() => handleNavigation('/')}
                 >
                     Heim
                 </li>
                 <li
-                    className='font-serif bg-white text-black text-lg md:text-xl border-t border-gray-500 p-2 cursor-pointer hover:bg-blue-600'
+                    className='font-serif text-white text-lg md:text-xl border-t border-gray-500 p-2 cursor-pointer hover:bg-blue-600'
                     onClick={() => handleNavigation('/orders')}
                 >
                     Pantanir
                 </li>
                 <li
-                    className='font-serif bg-white text-black text-lg md:text-xl border-t border-gray-500 p-2 cursor-pointer hover:bg-blue-600'
+                    className='font-serif text-white text-lg md:text-xl border-t border-gray-500 p-2 cursor-pointer hover:bg-blue-600'
                     onClick={() => handleNavigation('/supuplan')}
                 >
                     Súpuplan
                 </li>
                 <li
-                    className='font-serif bg-white text-black text-lg md:text-xl border-y border-gray-500 p-2 cursor-pointer hover:bg-blue-600'
+                    className='font-serif text-white text-lg md:text-xl border-y border-gray-500 p-2 cursor-pointer hover:bg-blue-600'
                     onClick={() => handleNavigation('/comment')}
                 >
                     Athugasemdir

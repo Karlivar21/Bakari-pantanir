@@ -44,6 +44,52 @@ const OrderList = () => {
         }
     };
 
+    const formatDate = (date) => {
+        const newdate = date.split('/');
+        let month = '';
+        switch (newdate[1]) {
+            case '01':
+                month = 'janúar';
+                break;
+            case '02':
+                month = 'febrúar';
+                break;
+            case '03':
+                month = 'mars';
+                break;
+            case '04':
+                month = 'apríl';
+                break;
+            case '05':
+                month = 'maí';
+                break;
+            case '06':
+                month = 'júní';
+                break;
+            case '07':
+                month = 'júlí';
+                break;
+            case '08':
+                month = 'ágúst';
+                break;
+            case '09':
+                month = 'september';
+                break;
+            case '10':
+                month = 'október';
+                break;
+            case '11':
+                month = 'nóvember';
+                break;
+            case '12':
+                month = 'desember';
+                break;
+            default:
+                month = 'janúar';
+        }
+        return `${newdate[0]}. ${month}`;
+    };
+
     const formatProducts = (order) => {
         const products = [];
 
@@ -109,7 +155,7 @@ const OrderList = () => {
                                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{order.name}</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{order.phone}</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{order.email}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{new Date(order.date).toLocaleDateString()}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{formatDate(new Date(order.date).toLocaleDateString())}</td>
                                     <td className="px-2 py-2 mt-2 bg-blue-500 text-md text-white font-serif rounded-lg cursor-pointer" onClick={() => handleOrderClick(order)}>
                                         Order Details
                                     </td>
