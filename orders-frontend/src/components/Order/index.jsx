@@ -36,49 +36,21 @@ const OrderView = () => {
     };
 
     const formatDate = (date) => {
-        const newdate = date.split('/');
-        let month = '';
-        switch (newdate[1]) {
-            case '01':
-                month = 'janúar';
-                break;
-            case '02':
-                month = 'febrúar';
-                break;
-            case '03':
-                month = 'mars';
-                break;
-            case '04':
-                month = 'apríl';
-                break;
-            case '05':
-                month = 'maí';
-                break;
-            case '06':
-                month = 'júní';
-                break;
-            case '07':
-                month = 'júlí';
-                break;
-            case '08':
-                month = 'ágúst';
-                break;
-            case '09':
-                month = 'september';
-                break;
-            case '10':
-                month = 'október';
-                break;
-            case '11':
-                month = 'nóvember';
-                break;
-            case '12':
-                month = 'desember';
-                break;
-            default:
-                month = 'janúar';
-        }
-        return `${newdate[0]}. ${month}`;
+        // Assume the date is in 'DD/MM/YYYY' format
+        const [day, month, year] = date.split('/');
+
+        // Create a Date object from the components
+        const parsedDate = new Date(`${year}-${month}-${day}`);
+
+        // Array of month names in Icelandic
+        const monthNames = [
+            'janúar', 'febrúar', 'mars', 'apríl', 'maí', 'júní',
+            'júlí', 'ágúst', 'september', 'október', 'nóvember', 'desember'
+        ];
+
+        // Get the month and format the date accordingly
+        const formattedMonth = monthNames[parsedDate.getMonth()];
+        return `${parsedDate.getDate()} ${formattedMonth}`;
     };
 
     const formatProducts = (order) => {
