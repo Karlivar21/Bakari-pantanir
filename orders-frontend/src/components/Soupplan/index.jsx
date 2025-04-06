@@ -1,132 +1,104 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Sidebar from '../Sidebar';
+import { useAlert } from '../Alert/AlertContext';
 
 const soupOptions = [
-  'Aspassúpa',
-  'Blaðlaukssúpa',
-  'Blómkálssúpa',
-  'Brokkólísúpa',
-  'Brauðsúpa',
-  'Fiskisúpa',
-  'Gulrótarsúpa',
-  'Graskerssúpa',
-  'Íslensk Kjötsúpa',
-  'Mexíkósk Kjúklingasúpa',
-  'Paprikusúpa',
-  'Rjómalöguð Sveppasúpa',
-  'Sætkartöflusúpa',
-  'Tómatsúpa',
-  'Tælensk Núðlusúpa',
+  'Aspassúpa', 'Blaðlaukssúpa', 'Blómkálssúpa', 'Brokkólísúpa', 'Brauðsúpa', 'Fiskisúpa',
+  'Gulrótarsúpa', 'Graskerssúpa', 'Íslensk Kjötsúpa', 'Mexíkósk Kjúklingasúpa', 'Paprikusúpa',
+  'Rjómalöguð Sveppasúpa', 'Sætkartöflusúpa', 'Tómatsúpa', 'Tælensk Núðlusúpa',
 ];
 
 const SoupPlanAdmin = () => {
   const [oldsoupPlan, setOldSoupPlan] = useState({
-    Mánudagur: '',
-    Þriðjudagur: '',
-    Miðvikudagur: '',
-    Fimmtudagur: '',
-    Föstudagur: '',
-    week: {
-      startDate: '',
-      endDate: ''
-    }
+    Mánudagur: '', Þriðjudagur: '', Miðvikudagur: '', Fimmtudagur: '', Föstudagur: '',
+    week: { startDate: '', endDate: '' }
   });
   const [soupPlan, setSoupPlan] = useState({
-    Mánudagur: '',
-    Þriðjudagur: '',
-    Miðvikudagur: '',
-    Fimmtudagur: '',
-    Föstudagur: '',
-    week: {
-      startDate: '',
-      endDate: ''
-    }
+    Mánudagur: '', Þriðjudagur: '', Miðvikudagur: '', Fimmtudagur: '', Föstudagur: '',
+    week: { startDate: '', endDate: '' }
   });
+  const { showAlert } = useAlert();
 
   useEffect(() => {
     axios.get('https://api.kallabakari.is/api/soupPlan')
-      .then(response => {
-        const fetchedPlan = response.data;
-        console.log('Fetched Plan:', fetchedPlan); // Debugging log
-        setOldSoupPlan(fetchedPlan);
-      })
-      .catch(error => {
-        console.error('Error fetching soup plan:', error);
-      });
+      .then(response => setOldSoupPlan(response.data))
+      .catch(error => console.error('Error fetching soup plan:', error));
   }, []);
 
   const handleChange = (day, value) => {
-    setSoupPlan(prevPlan => ({
-      ...prevPlan,
-      [day]: value
-    }));
+    setSoupPlan(prev => ({ ...prev, [day]: value }));
   };
 
   const handleWeekChange = (field, value) => {
-    setSoupPlan(prevPlan => ({
-      ...prevPlan,
-      week: {
-        ...prevPlan.week,
-        [field]: value
-      }
-    }));
+    setSoupPlan(prev => ({ ...prev, week: { ...prev.week, [field]: value } }));
   };
 
   const handleSubmit = () => {
     axios.post('https://api.kallabakari.is/api/soupPlan', soupPlan)
-      .then(response => {
-        alert('Soup plan updated successfully');
-      })
-      .catch(error => {
-        console.error('Error updating soup plan:', error);
-      });
+      .then(() => showAlert('Súpuplan vistað!', 'success'))
+      .catch(error => console.error('Error updating soup plan:', error));
   };
 
   return (
-    <div className='flex min-h-screen'>
-      <Sidebar/> {/* Sidebar takes 20% of the width */}
-      <div className='flex flex-col h-4/5 p-4 items-center bg-gray-200 rounded-lg ml-32 mt-10'>
-        <h2 className='text-2xl font-serif font-bold mb-4'>Súpuplan</h2>
-        <div className="mb-4">
-          <label className='mr-2 font-serif text-lg'>Start Date:</label>
-          <input
-            type="date"
-            value={soupPlan.week.startDate}
-            onChange={e => handleWeekChange('startDate', e.target.value)}
-            className='border border-gray-300 rounded-md px-2 py-1'
-          />
-          <label className='ml-4 mr-2 font-serif text-lg'>End Date:</label>
-          <input
-            type="date"
-            value={soupPlan.week.endDate}
-            onChange={e => handleWeekChange('endDate', e.target.value)}
-            className='border border-gray-300 rounded-md px-2 py-1'
-          />
-        </div>
-        {Object.keys(oldsoupPlan).filter(day => day !== 'week').map(day => (
-          <div className="soup mb-4" key={day}>
-            <label className='mr-2 font-serif text-lg'>{day}:</label>
-            <select
-              value={soupPlan[day]}
-              onChange={e => handleChange(day, e.target.value)}
-              className='border border-gray-300 rounded-md px-2 py-1'
-            >
-              <option value="">Select a soup</option>
-              {soupOptions.map((soup, index) => (
-                <option key={index} value={soup}>
-                  {soup}
-                </option>
-              ))}
-            </select>
+    <div className="flex min-h-screen bg-gray-100">
+      <Sidebar />
+      
+      <div className="flex flex-col flex-1 items-center py-10 px-4 md:px-10">
+        <div className="w-full max-w-3xl bg-white rounded-2xl shadow-lg p-8 space-y-8">
+          <h2 className="text-4xl font-serif font-bold text-center text-blue-700">Súpuplan</h2>
+
+          {/* Date selection */}
+          <div className="flex flex-col md:flex-row items-center justify-center gap-6">
+            <div className="flex flex-col">
+              <label className="text-gray-700 font-serif mb-1">Start Date</label>
+              <input
+                type="date"
+                value={soupPlan.week.startDate}
+                onChange={e => handleWeekChange('startDate', e.target.value)}
+                className="border rounded-lg p-2 shadow-sm focus:ring-2 focus:ring-blue-300"
+              />
+            </div>
+            <div className="flex flex-col">
+              <label className="text-gray-700 font-serif mb-1">End Date</label>
+              <input
+                type="date"
+                value={soupPlan.week.endDate}
+                onChange={e => handleWeekChange('endDate', e.target.value)}
+                className="border rounded-lg p-2 shadow-sm focus:ring-2 focus:ring-blue-300"
+              />
+            </div>
           </div>
-        ))}
-        <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          onClick={handleSubmit}
-        >
-          Save
-        </button>
+
+          {/* Soup plan per day */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {Object.keys(oldsoupPlan).filter(day => day !== 'week').map(day => (
+              <div key={day} className="flex flex-col space-y-2">
+                <label className="text-lg font-serif text-gray-800">{day}</label>
+                <select
+                  value={soupPlan[day]}
+                  onChange={e => handleChange(day, e.target.value)}
+                  className="border rounded-lg p-2 shadow-sm focus:ring-2 focus:ring-blue-300"
+                >
+                  <option value="">Veldu súpu</option>
+                  {soupOptions.map((soup, index) => (
+                    <option key={index} value={soup}>{soup}</option>
+                  ))}
+                </select>
+              </div>
+            ))}
+          </div>
+
+          {/* Save button */}
+          <div className="flex justify-center">
+            <button
+              onClick={handleSubmit}
+              className="bg-blue-500 hover:bg-blue-600 text-white text-lg font-bold py-3 px-10 rounded-xl shadow-md transition-all"
+            >
+              Vista
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

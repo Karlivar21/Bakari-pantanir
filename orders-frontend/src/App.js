@@ -11,6 +11,7 @@ import PrivateRoute from './routes/PrivateRoute';
 import AuthInitializer from './auth/AuthInit'; // Import AuthInitializer
 import OrderView from './components/Order';
 import Comment from './components/Comment';
+import { AlertProvider } from './components/Alert/AlertContext';
 import './index.css'; // Import Tailwind CSS
 
 const App = () => {
@@ -18,6 +19,7 @@ const App = () => {
       <Router>
         <AuthProvider>
                 <AuthInitializer>
+                    <AlertProvider>
                     <div className="App">
                         <Routes>
                             <Route path="/signin" element={<SignIn />} />
@@ -31,6 +33,7 @@ const App = () => {
                             </Route>
                         </Routes>
                     </div>
+                    </AlertProvider>
                 </AuthInitializer>
           </AuthProvider>
         </Router>

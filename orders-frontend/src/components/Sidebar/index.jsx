@@ -1,55 +1,52 @@
 import React, { useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '../../auth/AuthContext'; // Adjust the path as necessary
+import { useNavigate, useLocation } from 'react-router-dom';
+import { AuthContext } from '../../auth/AuthContext';
 
 const Sidebar = () => {
     const navigate = useNavigate();
+    const location = useLocation();
     const { logout } = useContext(AuthContext);
 
-    const handleLogout = () => {
-        logout(); // Call the logout function from context
-    };
-
-    // Handler for navigating to different routes
     const handleNavigation = (path) => {
         navigate(path);
     };
 
     return (
-        <div className="flex flex-col bg-zinc-900 w-1/4 md:w-1/6 min-h-screen border-r border-black">
-            <h2 className='font-serif p-3 text-white font-semibold text-lg md:text-4xl mb-5'>Pantanakerfi</h2>
-            <ul className="flex-grow">
-                <li
-                    className='font-serif text-white text-lg md:text-xl border-t border-gray-500 p-2 cursor-pointer hover:bg-blue-600'
-                    onClick={() => handleNavigation('/')}
-                >
-                    Heim
-                </li>
-                <li
-                    className='font-serif text-white text-lg md:text-xl border-t border-gray-500 p-2 cursor-pointer hover:bg-blue-600'
-                    onClick={() => handleNavigation('/orders')}
-                >
-                    Pantanir
-                </li>
-                <li
-                    className='font-serif text-white text-lg md:text-xl border-t border-gray-500 p-2 cursor-pointer hover:bg-blue-600'
-                    onClick={() => handleNavigation('/supuplan')}
-                >
-                    Súpuplan
-                </li>
-                <li
-                    className='font-serif text-white text-lg md:text-xl border-y border-gray-500 p-2 cursor-pointer hover:bg-blue-600'
-                    onClick={() => handleNavigation('/comment')}
-                >
-                    Athugasemdir
-                </li>
+        <div className="flex flex-col bg-zinc-900 w-1/5 md:w-1/6 min-h-screen p-6 space-y-8 shadow-md">
+            <h2 className="font-serif text-3xl text-white font-bold tracking-wide">
+                Pantanakerfi
+            </h2>
+
+            <ul className="flex flex-col gap-4 mt-8">
+                {[
+                    { label: 'Heim', path: '/' },
+                    { label: 'Pantanir', path: '/orders' },
+                    { label: 'Súpuplan', path: '/supuplan' },
+                    { label: 'Athugasemdir', path: '/comment' }
+                ].map((item) => {
+                    const isActive = location.pathname === item.path;
+                    return (
+                        <li
+                            key={item.path}
+                            onClick={() => handleNavigation(item.path)}
+                            className={`text-lg md:text-xl font-serif p-3 rounded-lg cursor-pointer transition-all
+                                ${isActive ? 'bg-blue-700 text-white font-bold' : 'text-white hover:bg-blue-600 hover:shadow-md'}
+                            `}
+                        >
+                            {item.label}
+                        </li>
+                    );
+                })}
             </ul>
-            <button
-                className='bg-blue-600 text-white text-lg md:text-xl mt-auto py-2 px-4 rounded-lg m-4'
-                onClick={handleLogout}
-            >
-                Skrá út
-            </button>
+
+            <div className="mt-auto">
+                <button
+                    onClick={logout}
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-xl transition-all"
+                >
+                    Skrá út
+                </button>
+            </div>
         </div>
     );
 };
