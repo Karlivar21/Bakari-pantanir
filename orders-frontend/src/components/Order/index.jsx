@@ -96,6 +96,9 @@ const OrderView = () => {
                     const minidonut = product.details;
                     products.push(`Minidonuts - Magn: ${minidonut.quantity}`);
                     break;
+                case "bite": 
+                    const b = product.details; const label = `${b.name}${b.description ? ` (${b.description})` : ""}`; products.push(`${label} - Magn: ${b.quantity}`); 
+                    break; 
                 default:
                     products.push(`${product.details.other} - Magn: ${product.details.quantity}`);
             }
