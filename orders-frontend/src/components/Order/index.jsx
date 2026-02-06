@@ -191,7 +191,7 @@ const OrderView = () => {
                         {order.image && (
                             <div className="flex-1 bg-gray-200 p-4 rounded-lg">
                                 <a 
-                                    href={`https://api.kallabakari.is/${order.image}`}
+                                    href={`${order.image}`}
                                     download={order.image.split('/').pop()}
                                     className='flex bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600'
                                 >
