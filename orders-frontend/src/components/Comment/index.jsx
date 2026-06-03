@@ -1,58 +1,50 @@
 import React, { useEffect, useState } from 'react';
-import Sidebar from "../Sidebar";
+import Sidebar from '../Sidebar';
 import axios from 'axios';
 
-
-
 const Comment = () => {
-
     const [comments, setComments] = useState([]);
 
     useEffect(() => {
-        const fetchComments = async () => {
-            try {
-                const response = await axios.get('https://api.kallabakari.is/api/comments');
-                setComments(response.data);
-            } catch (error) {
-                console.error('Error fetching comments:', error);
-            }
-        };
-
-        fetchComments();
-    }, []); 
-
-
+        axios.get('https://api.kallabakari.is/api/comments')
+            .then(res => setComments(res.data))
+            .catch(err => console.error('Error fetching comments:', err));
+    }, []);
 
     return (
-        <div className="flex bg-gray-800">
-            <Sidebar/>
-            <div className="flex flex-col p-6 w-full overflow-hidden">
-                <h1 className="text-3xl text-white font-serif font-bold mb-4">Athugasemdir</h1>
-                <div className="overflow-x-auto w-full">
-                    <table className="w-full divide-y divide-gray-200 bg-white">
-                        <thead className="bg-gray-100">
-                            <tr>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nafn</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sími</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Netfang</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Athugasemd</th>
+        <div className="flex min-h-screen bg-gray-50">
+            <Sidebar />
+            <main className="flex-1 p-8">
+                <h1 className="text-xl font-semibold text-gray-900 mb-6">Athugasemdir</h1>
+
+                <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                    <table className="w-full">
+                        <thead>
+                            <tr className="bg-gray-50 border-b border-gray-100">
+                                <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Nafn</th>
+                                <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Sími</th>
+                                <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Netfang</th>
+                                <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Athugasemd</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-gray-200">
+                        <tbody className="divide-y divide-gray-50">
                             {comments.map((comment) => (
-                                <tr key={comment.id}>
-                                    <td className="px-6 py-4 whitespace-nowrap">{comment.name}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap">{comment.phone}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap">{comment.email}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap">{comment.message}</td>
+                                <tr key={comment.id} className="hover:bg-amber-50/30 transition-colors">
+                                    <td className="px-5 py-3.5 text-sm font-medium text-gray-900">{comment.name}</td>
+                                    <td className="px-5 py-3.5 text-sm text-gray-500">{comment.phone}</td>
+                                    <td className="px-5 py-3.5 text-sm text-gray-500">{comment.email}</td>
+                                    <td className="px-5 py-3.5 text-sm text-gray-600">{comment.message}</td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
+                    {comments.length === 0 && (
+                        <p className="text-sm text-gray-400 px-5 py-6">Engar athugasemdir fundust</p>
+                    )}
                 </div>
-            </div>
+            </main>
         </div>
     );
-}
+};
 
 export default Comment;

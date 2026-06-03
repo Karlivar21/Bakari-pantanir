@@ -4,6 +4,35 @@ import Sidebar from '../Sidebar';
 import axios from 'axios';
 import { useAlert } from '../Alert/AlertContext';
 
+const inputCls = 'w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-300 focus:border-amber-400';
+
+const formatDate = (date) => {
+    const [day, month, year] = date.split('/');
+    const parsed = new Date(`${year}-${month}-${day}`);
+    const months = ['janúar', 'febrúar', 'mars', 'apríl', 'maí', 'júní', 'júlí', 'ágúst', 'september', 'október', 'nóvember', 'desember'];
+    return `${parsed.getDate()} ${months[parsed.getMonth()]}`;
+};
+
+const formatProducts = (order) => {
+    if (!order?.products) return [];
+    return order.products.map((product) => {
+        switch (product.type) {
+            case 'cake': {
+                const c = product.details;
+                if (c.cake === 'Sykurmassamynd') return c.cake;
+                return `${c.cake} – Stærð: ${c.size}${c.filling ? `, Fylling: ${c.filling}` : ''}${c.bottom ? `, Botn: ${c.bottom}` : ''}${c.smjorkrem ? `, Smjörkrem: ${c.smjorkrem}` : ''}${c.text ? `, Texti: ${c.text}` : ''}${c.skreyting ? `, Skreyting: ${c.skreyting}` : ''}`;
+            }
+            case 'bread': return `${product.details.bread} – Magn: ${product.details.quantity}`;
+            case 'minidonut': return `Minidonuts – Magn: ${product.details.quantity}`;
+            case 'bite': {
+                const b = product.details;
+                return `${b.name}${b.description ? ` (${b.description})` : ''} – Magn: ${b.quantity}`;
+            }
+            default: return `${product.details.other} – Magn: ${product.details.quantity}`;
+        }
+    });
+};
+
 const OrderView = () => {
     const { orderId } = useParams();
     const navigate = useNavigate();
@@ -13,41 +42,29 @@ const OrderView = () => {
     const { showAlert } = useAlert();
 
     useEffect(() => {
-        const fetchOrders = async () => {
-            try {
-                const response = await axios.get('https://api.kallabakari.is/api/orders');
-                const foundOrder = response.data.find((order) => order.id === orderId);
-                setOrder(foundOrder);
-                setEditedOrder(foundOrder); // Initialize editedOrder when fetching
-            } catch (error) {
-                console.error('Error fetching orders:', error);
-            }
-        };
-
-        fetchOrders();
+        axios.get('https://api.kallabakari.is/api/orders')
+            .then(res => {
+                const found = res.data.find((o) => o.id === orderId);
+                setOrder(found);
+                setEditedOrder(found);
+            })
+            .catch(err => console.error('Error fetching orders:', err));
     }, [orderId]);
 
     const handleRemoveOrder = async () => {
+        if (!window.confirm('Ertu viss um að þú viljir eyða þessari pöntun?')) return;
         try {
             await axios.delete(`https://api.kallabakari.is/api/orders/${orderId}`);
             showAlert('Pöntun hefur verið eydd!', 'success');
-            navigate('/');
-        } catch (error) {
-            console.error('Error removing the order:', error);
+            navigate('/orders');
+        } catch {
             showAlert('Mistókst að eyða pöntun!', 'error');
         }
     };
 
-    const handleEditToggle = () => {
-        setIsEditing(!isEditing);
-    };
-
     const handleInputChange = (e) => {
         const { name, value, type, checked } = e.target;
-        setEditedOrder(prev => ({
-            ...prev,
-            [name]: type === 'checkbox' ? checked : value
-        }));
+        setEditedOrder(prev => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
     };
 
     const handleSaveChanges = async () => {
@@ -56,186 +73,128 @@ const OrderView = () => {
             setOrder(editedOrder);
             setIsEditing(false);
             showAlert('Pöntun hefur verið uppfærð!', 'success');
-        } catch (error) {
-            console.error('Error updating order:', error);
+        } catch {
             showAlert('Það mistókst að uppfæra pöntunina', 'error');
         }
     };
 
-    const formatDate = (date) => {
-        const [day, month, year] = date.split('/');
-        const parsedDate = new Date(`${year}-${month}-${day}`);
-        const monthNames = [
-            'janúar', 'febrúar', 'mars', 'apríl', 'maí', 'júní',
-            'júlí', 'ágúst', 'september', 'október', 'nóvember', 'desember'
-        ];
-        const formattedMonth = monthNames[parsedDate.getMonth()];
-        return `${parsedDate.getDate()} ${formattedMonth}`;
-    };
-
-    const formatProducts = (order) => {
-        if (!order || !order.products) return [];
-
-        const products = [];
-
-        order.products.forEach((product) => {
-            switch (product.type) {
-                case 'cake':
-                    const cake = product.details;
-                    if (cake.cake === 'Sykurmassamynd') {
-                        products.push(`${cake.cake}`);
-                    } else {
-                        products.push(`${cake.cake} - Stærð: ${cake.size}${cake.filling ? `, Fylling: ${cake.filling}` : ''}${cake.bottom ? `, Botn: ${cake.bottom}` : ''}${cake.smjorkrem ? `, Smjörkrem: ${cake.smjorkrem}` : ''}${cake.text ? `, Texti: ${cake.text}` : ''}${cake.skreyting ? `, Skreyting: ${cake.skreyting}` : ''}`);
-                    }
-                    break;
-                case 'bread':
-                    const bread = product.details;
-                    products.push(`${bread.bread} - Magn: ${bread.quantity}`);
-                    break;
-                case 'minidonut':
-                    const minidonut = product.details;
-                    products.push(`Minidonuts - Magn: ${minidonut.quantity}`);
-                    break;
-                case "bite": 
-                    const b = product.details; const label = `${b.name}${b.description ? ` (${b.description})` : ""}`; products.push(`${label} - Magn: ${b.quantity}`); 
-                    break; 
-                default:
-                    products.push(`${product.details.other} - Magn: ${product.details.quantity}`);
-            }
-        });
-
-        return products;
-    };
-
     if (!order) {
-        return <p>Loading order details...</p>;
+        return (
+            <div className="flex min-h-screen bg-gray-50">
+                <Sidebar />
+                <main className="flex-1 p-8 flex items-center justify-center">
+                    <p className="text-sm text-gray-400">Hleður pöntun...</p>
+                </main>
+            </div>
+        );
     }
 
     return (
-        <div className="flex bg-gray-800">
+        <div className="flex min-h-screen bg-gray-50">
             <Sidebar />
-            <div className="flex flex-col items-center ml-12 mt-5 p-6">
-                <h2 className="text-2xl text-white font-serif font-bold mb-4">Pöntunar upplýsingar</h2>
-                <div className="rounded-lg p-4 bg-white shadow-lg">
-                    <div className="flex flex-col border border-blue-700 rounded-lg p-4 space-y-4 bg-gray-100">
-                        <div className="flex-1 bg-gray-200 p-4 rounded-lg">
-                            {isEditing ? (
-                                <>
-                                    <input
-                                        className="block w-full mb-2 p-2 rounded"
-                                        type="text"
-                                        name="name"
-                                        value={editedOrder.name || ''}
-                                        onChange={handleInputChange}
-                                        placeholder="Name"
-                                    />
-                                    <input
-                                        className="block w-full mb-2 p-2 rounded"
-                                        type="text"
-                                        name="phone"
-                                        value={editedOrder.phone || ''}
-                                        onChange={handleInputChange}
-                                        placeholder="Phone"
-                                    />
-                                    <input
-                                        className="block w-full mb-2 p-2 rounded"
-                                        type="email"
-                                        name="email"
-                                        value={editedOrder.email || ''}
-                                        onChange={handleInputChange}
-                                        placeholder="Email"
-                                    />
-                                    <input
-                                        className="block w-full mb-2 p-2 rounded"
-                                        type="date"
-                                        name="date"
-                                        value={editedOrder.date ? new Date(editedOrder.date).toISOString().split('T')[0] : ''}
-                                        onChange={handleInputChange}
-                                    />
-                                    <textarea
-                                        className="block w-full mb-2 p-2 rounded"
-                                        name="user_message"
-                                        value={editedOrder.user_message || ''}
-                                        onChange={handleInputChange}
-                                        placeholder="Message"
-                                    />
-                                    <label className="block text-sm font-serif">
-                                        Greitt:
-                                        <input
-                                            type="checkbox"
-                                            name="payed"
-                                            checked={editedOrder.payed || false}
-                                            onChange={handleInputChange}
-                                            className="ml-2"
-                                        />
-                                    </label>
-                                </>
-                            ) : (
-                                <>
-                                    <p className="font-semibold font-serif text-lg">{order.name}</p>
-                                    <p className="font-serif">Símanúmer: {order.phone}</p>
-                                    <p className="font-serif">Netfang: {order.email}</p>
-                                    <p className="font-serif">Dagsetning: {formatDate(new Date(order.date).toLocaleDateString())}</p>
-                                    <p className='font-serif'>Greitt: {order.payed ? 'Já' : 'Nei'}</p>
-                                    <p className="font-serif">Athugasemdir: {order.user_message}</p>
-                                </>
-                            )}
-                        </div>
+            <main className="flex-1 p-8">
+                <div className="flex items-center gap-3 mb-6">
+                    <button onClick={() => navigate(-1)} className="text-sm text-gray-400 hover:text-gray-600 transition-colors">
+                        ← Til baka
+                    </button>
+                    <h1 className="text-xl font-semibold text-gray-900">Pöntunarupplýsingar</h1>
+                </div>
 
-                        <div className="flex-1 bg-gray-200 p-4 rounded-lg">
-                            {formatProducts(order).map((product, index) => (
-                                <p className="font-serif text-lg" key={index}>{product}</p>
-                            ))}
-                        </div>
-
-                        {order.image && (
-                            <div className="flex-1 bg-gray-200 p-4 rounded-lg">
-                                <a 
-                                    href={`${order.image}`}
-                                    download={order.image.split('/').pop()}
-                                    className='flex bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600'
-                                >
-                                    Download Image
-                                </a>
+                <div className="max-w-2xl space-y-4">
+                    {/* Customer info */}
+                    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                        <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4">Viðskiptavinur</h2>
+                        {isEditing ? (
+                            <div className="space-y-3">
+                                <input className={inputCls} type="text" name="name" value={editedOrder.name || ''} onChange={handleInputChange} placeholder="Nafn" />
+                                <input className={inputCls} type="text" name="phone" value={editedOrder.phone || ''} onChange={handleInputChange} placeholder="Sími" />
+                                <input className={inputCls} type="email" name="email" value={editedOrder.email || ''} onChange={handleInputChange} placeholder="Netfang" />
+                                <input className={inputCls} type="date" name="date" value={editedOrder.date ? new Date(editedOrder.date).toISOString().split('T')[0] : ''} onChange={handleInputChange} />
+                                <textarea className={`${inputCls} resize-none`} name="user_message" value={editedOrder.user_message || ''} onChange={handleInputChange} placeholder="Athugasemd" rows={3} />
+                                <label className="flex items-center gap-2 text-sm text-gray-700">
+                                    <input type="checkbox" name="payed" checked={editedOrder.payed || false} onChange={handleInputChange} className="rounded accent-amber-500" />
+                                    Greitt
+                                </label>
                             </div>
+                        ) : (
+                            <dl className="space-y-2.5">
+                                {[
+                                    { label: 'Nafn', value: order.name, bold: true },
+                                    { label: 'Sími', value: order.phone },
+                                    { label: 'Netfang', value: order.email },
+                                    { label: 'Dagsetning', value: formatDate(new Date(order.date).toLocaleDateString()) },
+                                ].map(({ label, value, bold }) => (
+                                    <div key={label} className="flex">
+                                        <dt className="w-28 text-sm text-gray-400">{label}</dt>
+                                        <dd className={`text-sm ${bold ? 'font-semibold text-gray-900' : 'text-gray-700'}`}>{value}</dd>
+                                    </div>
+                                ))}
+                                <div className="flex">
+                                    <dt className="w-28 text-sm text-gray-400">Greitt</dt>
+                                    <dd>
+                                        <span className={`inline-flex text-xs font-medium px-2 py-0.5 rounded-full ${order.payed ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-600'}`}>
+                                            {order.payed ? 'Já' : 'Nei'}
+                                        </span>
+                                    </dd>
+                                </div>
+                                {order.user_message && (
+                                    <div className="flex">
+                                        <dt className="w-28 text-sm text-gray-400">Athugasemd</dt>
+                                        <dd className="text-sm text-gray-700">{order.user_message}</dd>
+                                    </div>
+                                )}
+                            </dl>
                         )}
                     </div>
-                </div>
 
-                {/* Buttons */}
-                <div className="flex space-x-4 mt-4">
-                    {isEditing ? (
-                        <>
-                            <button 
-                                onClick={handleSaveChanges}
-                                className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+                    {/* Products */}
+                    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                        <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4">Vörur</h2>
+                        <ul className="space-y-2">
+                            {formatProducts(order).map((product, index) => (
+                                <li key={index} className="text-sm text-gray-700 bg-amber-50 border border-amber-100 rounded-lg px-3 py-2">
+                                    {product}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+
+                    {/* Image download */}
+                    {order.image && (
+                        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                            <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4">Mynd</h2>
+                            <a
+                                href={order.image}
+                                download={order.image.split('/').pop()}
+                                className="inline-flex items-center gap-2 bg-amber-600 hover:bg-amber-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
                             >
-                                Save
-                            </button>
-                            <button 
-                                onClick={handleEditToggle}
-                                className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
-                            >
-                                Cancel
-                            </button>
-                        </>
-                    ) : (
-                        <button 
-                            onClick={handleEditToggle}
-                            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                        >
-                            Edit
-                        </button>
+                                Sækja mynd
+                            </a>
+                        </div>
                     )}
 
-                    <button 
-                        onClick={handleRemoveOrder}
-                        className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-                    >
-                        Remove Order
-                    </button>
+                    {/* Actions */}
+                    <div className="flex gap-3">
+                        {isEditing ? (
+                            <>
+                                <button onClick={handleSaveChanges} className="bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors">
+                                    Vista
+                                </button>
+                                <button onClick={() => setIsEditing(false)} className="bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium px-4 py-2 rounded-lg transition-colors">
+                                    Hætta við
+                                </button>
+                            </>
+                        ) : (
+                            <button onClick={() => setIsEditing(true)} className="bg-amber-600 hover:bg-amber-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors">
+                                Breyta
+                            </button>
+                        )}
+                        <button onClick={handleRemoveOrder} className="bg-red-50 hover:bg-red-100 text-red-600 border border-red-100 text-sm font-medium px-4 py-2 rounded-lg transition-colors">
+                            Eyða pöntun
+                        </button>
+                    </div>
                 </div>
-            </div>
+            </main>
         </div>
     );
 };

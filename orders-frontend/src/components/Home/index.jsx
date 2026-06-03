@@ -28,58 +28,44 @@ const Home = () => {
     };
 
     return (
-        <div className="flex min-h-screen">
-            <Sidebar className="w-1/5" />
-            
-            <div className="flex-1 p-6 space-y-6">
-                {/* Top control bar */}
-                <div className="flex flex-col md:flex-row items-center justify-between bg-white shadow-md p-4 rounded-2xl mb-6">
-                    {/* View selector */}
+        <div className="flex min-h-screen bg-gray-50">
+            <Sidebar />
+            <main className="flex-1 p-8">
+                <div className="flex items-center justify-between mb-8">
                     <select
-                        onChange={(e) => setView(e.target.value)}
                         value={view}
-                        className="text-blue-600 text-lg md:text-xl font-semibold w-40 rounded-xl border border-gray-300 p-2 hover:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                        onChange={(e) => setView(e.target.value)}
+                        className="border border-gray-200 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-300 focus:border-amber-400"
                     >
                         <option value="day">Dagur</option>
                         <option value="week">Vika</option>
                         <option value="month">Mánuður</option>
                     </select>
 
-                    {/* Navigation buttons */}
                     {(view === 'day' || view === 'week') && (
-                        <NavigationButtons
-                            onPrev={() => view === 'day' ? handleChangeDate(-1) : handleChangeWeek(-7)}
-                            onNext={() => view === 'day' ? handleChangeDate(1) : handleChangeWeek(7)}
-                        />
+                        <div className="flex gap-2">
+                            <button
+                                onClick={() => view === 'day' ? handleChangeDate(-1) : handleChangeWeek(-7)}
+                                className="bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 px-4 py-2 rounded-lg text-sm font-medium shadow-sm transition-colors"
+                            >
+                                ← Fyrri
+                            </button>
+                            <button
+                                onClick={() => view === 'day' ? handleChangeDate(1) : handleChangeWeek(7)}
+                                className="bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 px-4 py-2 rounded-lg text-sm font-medium shadow-sm transition-colors"
+                            >
+                                Næsta →
+                            </button>
+                        </div>
                     )}
                 </div>
 
-                {/* Main content */}
-                <div className="flex flex-col items-center">
-                    {view === 'day' && <DayView orders={orders} date={selectedDate.toLocaleDateString('is-IS')} />}
-                    {view === 'week' && <WeekView weekOrders={weekOrders} />}
-                    {view === 'month' && <MonthView orders={orders} />}
-                </div>
-            </div>
+                {view === 'day' && <DayView orders={orders} date={selectedDate.toLocaleDateString('is-IS')} />}
+                {view === 'week' && <WeekView weekOrders={weekOrders} />}
+                {view === 'month' && <MonthView orders={orders} />}
+            </main>
         </div>
     );
 };
-
-const NavigationButtons = ({ onPrev, onNext }) => (
-    <div className="flex gap-4 mt-4 md:mt-0">
-        <button
-            onClick={onPrev}
-            className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded-xl shadow-md transition-all duration-200"
-        >
-            Fyrri
-        </button>
-        <button
-            onClick={onNext}
-            className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded-xl shadow-md transition-all duration-200"
-        >
-            Næsti
-        </button>
-    </div>
-);
 
 export default Home;

@@ -2,47 +2,48 @@ import React, { useContext } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { AuthContext } from '../../auth/AuthContext';
 
+const navItems = [
+    { label: 'Heim', path: '/' },
+    { label: 'Pantanir', path: '/orders' },
+    { label: 'Súpuplan', path: '/supuplan' },
+    { label: 'Athugasemdir', path: '/comment' },
+];
+
 const Sidebar = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const { logout } = useContext(AuthContext);
 
-    const handleNavigation = (path) => {
-        navigate(path);
-    };
-
     return (
-        <div className="flex flex-col bg-zinc-900 w-1/5 md:w-1/6 min-h-screen p-6 space-y-8 shadow-md">
-            <h2 className="font-serif text-3xl text-white font-bold tracking-wide">
-                Pantanakerfi
-            </h2>
+        <div className="flex flex-col w-56 min-h-screen bg-gray-900 flex-shrink-0">
+            <div className="px-5 py-6 border-b border-gray-700/60">
+                <p className="font-serif text-amber-400 text-lg font-bold tracking-wide">Kalla Bakari</p>
+                <p className="text-gray-500 text-xs mt-0.5">Pantanakerfi</p>
+            </div>
 
-            <ul className="flex flex-col gap-4 mt-8">
-                {[
-                    { label: 'Heim', path: '/' },
-                    { label: 'Pantanir', path: '/orders' },
-                    { label: 'Súpuplan', path: '/supuplan' },
-                    { label: 'Athugasemdir', path: '/comment' }
-                ].map((item) => {
+            <nav className="flex-1 px-3 py-4 space-y-0.5">
+                {navItems.map((item) => {
                     const isActive = location.pathname === item.path;
                     return (
-                        <li
+                        <button
                             key={item.path}
-                            onClick={() => handleNavigation(item.path)}
-                            className={`text-lg md:text-xl font-serif p-3 rounded-lg cursor-pointer transition-all
-                                ${isActive ? 'bg-blue-700 text-white font-bold' : 'text-white hover:bg-blue-600 hover:shadow-md'}
-                            `}
+                            onClick={() => navigate(item.path)}
+                            className={`w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                                isActive
+                                    ? 'bg-amber-500 text-gray-900'
+                                    : 'text-gray-400 hover:text-white hover:bg-gray-700/50'
+                            }`}
                         >
                             {item.label}
-                        </li>
+                        </button>
                     );
                 })}
-            </ul>
+            </nav>
 
-            <div className="mt-auto">
+            <div className="px-3 py-4 border-t border-gray-700/60">
                 <button
                     onClick={logout}
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-xl transition-all"
+                    className="w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-gray-500 hover:text-white hover:bg-gray-700/50 transition-colors"
                 >
                     Skrá út
                 </button>

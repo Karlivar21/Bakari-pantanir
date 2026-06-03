@@ -2,9 +2,13 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Sidebar from '../Sidebar';
-import kokur from '../../resources/kokur.json'; // Assuming kokur.json has correct format
-import { v4 as uuidv4 } from 'uuid'; 
-import './styles.css';
+import kokur from '../../resources/kokur.json';
+import { v4 as uuidv4 } from 'uuid';
+
+const inputCls = 'w-full border border-gray-200 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-amber-300 focus:border-amber-400';
+const Label = ({ children }) => (
+    <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">{children}</label>
+);
 
 const AddOrder = () => {
     const [name, setName] = useState('');
@@ -17,111 +21,43 @@ const AddOrder = () => {
     const [productType, setProductType] = useState('');
     const [quantity, setQuantity] = useState('');
     const [selectedCake, setSelectedCake] = useState('');
-    const [payed, setPayed] = useState(false);
     const [selectedText, setSelectedText] = useState('');
     const [selectedSkreyting, setSelectedSkreyting] = useState('');
     const [cakeDetails, setCakeDetails] = useState({
-        cake: '',
-        size: '',
-        filling: '',
-        bottom: '',
-        smjorkrem: '',
-        url: '',
-        text: '',
-        skreyting: ''
+        cake: '', size: '', filling: '', bottom: '', smjorkrem: '', url: '', text: '', skreyting: ''
     });
     const navigate = useNavigate();
 
-    const handleChangeProduct = (productType) => {
-        setSelectedProductType(productType);
-        console.log('Selected product type:', productType);
-    };
-
     const handleAddProduct = () => {
         let details = {};
-
         switch (selectedProductType) {
-            case 'cake':
-                details = { ...cakeDetails };
-                break;
-            case 'bread':
-                details = { quantity: quantity };
-                break;
-            case 'minidonut':
-                details = { quantity: quantity };
-                break;
-            case 'other':
-                details = { other: productType, quantity: quantity };
-                break;
-            default:
-                console.log('Unknown product type:', selectedProductType);
-                return;
+            case 'cake': details = { ...cakeDetails }; break;
+            case 'bread': details = { quantity }; break;
+            case 'minidonut': details = { quantity }; break;
+            case 'other': details = { other: productType, quantity }; break;
+            default: return;
         }
-
-
-        const newProduct = {
-            type: selectedProductType,
-            details,
-        };
-        console.log('Adding product:', newProduct);
-        setProducts([...products, newProduct]);
-        // Reset form fields after adding
+        setProducts([...products, { type: selectedProductType, details }]);
         setSelectedProductType('');
         setProductType('');
         setQuantity('');
-        setCakeDetails({
-            cake: '',
-            size: '',
-            filling: '',
-            bottom: '',
-            smjorkrem: '',
-            url: '',
-            text: '',
-            skreyting: ''
-        });
+        setCakeDetails({ cake: '', size: '', filling: '', bottom: '', smjorkrem: '', url: '', text: '', skreyting: '' });
         setSelectedCake('');
+        setSelectedText('');
+        setSelectedSkreyting('');
     };
 
-    const handleCakeChange = (e) => {
-        setSelectedCake(e.target.value);
-        setCakeDetails(prevDetails => ({ ...prevDetails, cake: e.target.value }));
-    };
-
-    const handleSizeChange = (e) => {
-        setCakeDetails(prevDetails => ({ ...prevDetails, size: e.target.value }));
-    };
-
-    const handleFillingChange = (e) => {
-        setCakeDetails(prevDetails => ({ ...prevDetails, filling: e.target.value }));
-    };
-
-    const handleBottomChange = (e) => {
-        setCakeDetails(prevDetails => ({ ...prevDetails, bottom: e.target.value }));
-    };
-
-    const handleSmjorkremChange = (e) => {
-        setCakeDetails(prevDetails => ({ ...prevDetails, smjorkrem: e.target.value }));
-    };
-
-    const handleUrlChange = (e) => {
-        setCakeDetails(prevDetails => ({ ...prevDetails, url: e.target.value }));
-    };
-
-    const handleTextChange = (e) => {
-        setSelectedText(e.target.value);
-        setCakeDetails(prevDetails => ({ ...prevDetails, text: e.target.value }));
-    };
-
-    const handleSkreytingChange = (e) => {
-        setSelectedSkreyting(e.target.value);
-        setCakeDetails(prevDetails => ({ ...prevDetails, skreyting: e.target.value }));
-    };
-
-
+    const handleCakeChange = (e) => { setSelectedCake(e.target.value); setCakeDetails(p => ({ ...p, cake: e.target.value })); };
+    const handleSizeChange = (e) => setCakeDetails(p => ({ ...p, size: e.target.value }));
+    const handleFillingChange = (e) => setCakeDetails(p => ({ ...p, filling: e.target.value }));
+    const handleBottomChange = (e) => setCakeDetails(p => ({ ...p, bottom: e.target.value }));
+    const handleSmjorkremChange = (e) => setCakeDetails(p => ({ ...p, smjorkrem: e.target.value }));
+    const handleUrlChange = (e) => setCakeDetails(p => ({ ...p, url: e.target.value }));
+    const handleTextChange = (e) => { setSelectedText(e.target.value); setCakeDetails(p => ({ ...p, text: e.target.value })); };
+    const handleSkreytingChange = (e) => { setSelectedSkreyting(e.target.value); setCakeDetails(p => ({ ...p, skreyting: e.target.value })); };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         const formData = new FormData();
         formData.append('id', uuidv4());
         formData.append('name', name);
@@ -131,233 +67,216 @@ const AddOrder = () => {
         formData.append('products', JSON.stringify(products));
         formData.append('user_message', userMessage);
         formData.append('payed', false);
-
         try {
             await axios.post('https://api.kallabakari.is/api/orders', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
+                headers: { 'Content-Type': 'multipart/form-data' },
             });
-            alert('Order added successfully');
-            navigate('/');
+            navigate('/orders');
         } catch (error) {
             console.error('Error adding order:', error);
         }
     };
 
+    const selectedKaka = kokur.kokur.find(item => item.name === selectedCake);
+
     return (
-        <div className="flex min-h-screen">
+        <div className="flex min-h-screen bg-gray-50">
             <Sidebar />
-            <div className="flex-1 flex flex-col md:flex-row p-6">
-                {/* Form Container */}
-                <div className="form-container flex-1 md:w-2/3">
-                    <h1 className="text-3xl font-bold font-serif mb-4">Bæta við pöntun</h1>
-                    <form onSubmit={handleSubmit} className="flex flex-col w-full">
-                        <div className="flex flex-wrap bg-gray-200 rounded-lg p-2">
-                            <div className="flex flex-row items-center w-1/2">
-                                <label className='mt-4 font-serif text-xl m-2'>Nafn</label>
-                                <input className='border border-blue rounded-lg h-8 w-full mt-2 p-2 mr-3' type="text" value={name} onChange={(e) => setName(e.target.value)} required />
+            <main className="flex-1 p-8">
+                <h1 className="text-xl font-semibold text-gray-900 mb-6">Bæta við pöntun</h1>
+
+                <form onSubmit={handleSubmit} className="flex gap-6 items-start">
+                    <div className="flex-1 max-w-xl space-y-4">
+                        {/* Customer info */}
+                        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-4">
+                            <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Viðskiptavinur</h2>
+                            <div className="grid grid-cols-2 gap-3">
+                                <div>
+                                    <Label>Nafn</Label>
+                                    <input className={inputCls} type="text" value={name} onChange={e => setName(e.target.value)} required />
+                                </div>
+                                <div>
+                                    <Label>Símanúmer</Label>
+                                    <input className={inputCls} type="tel" value={phone} onChange={e => setPhone(e.target.value)} required />
+                                </div>
+                                <div>
+                                    <Label>Netfang</Label>
+                                    <input className={inputCls} type="email" value={email} onChange={e => setEmail(e.target.value)} required />
+                                </div>
+                                <div>
+                                    <Label>Dagsetning</Label>
+                                    <input className={inputCls} type="date" value={date} onChange={e => setDate(e.target.value)} required />
+                                </div>
                             </div>
-                            <div className="flex flex-row w-1/2">
-                                <label className='mt-4 font-serif items-center text-xl m-2'>Símanúmer</label>
-                                <input className='border border-blue rounded-lg h-8 w-full mt-2 p-2' type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} required />
-                            </div>
-                            <div className="flex flex-row w-1/2">
-                                <label className='mt-2 font-serif text-xl m-2'>Netfang</label>
-                                <input className='border border-blue rounded-lg h-8 w-full mt-2 p-2' type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-                            </div>
-                            <div className="flex flex-row w-1/2">
-                                <label className='mt-2 font-serif text-xl m-2'>Dagsetning</label>
-                                <input className='border border-blue rounded-lg h-8 w-full mt-2 p-2' type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
-                            </div>
-                            <div className="flex flex-row w-1/3">
-                                <label className='mt-4 font-serif text-xl m-2'>Greitt?</label>
-                                <input className='border border-blue rounded-lg h-8 w-1/5 mt-2 p-2' type="checkbox" value={payed} onChange={(e) => setPayed(e.target.checked)} />
-                            </div>
-                            <div className="flex flex-row w-2/3">
-                                <label className='mt-4 font-serif text-xl mr-3'>Athugasemd</label>
-                                <textarea className='border border-blue rounded-lg h-24 w-full mt-2 p-2' value={userMessage} onChange={(e) => setUserMessage(e.target.value)} />
+                            <div>
+                                <Label>Athugasemd</Label>
+                                <textarea className={`${inputCls} resize-none`} value={userMessage} onChange={e => setUserMessage(e.target.value)} rows={3} />
                             </div>
                         </div>
-                        {/* Add Product Section */}
-                        <div className="flex flex-col mt-4 bg-gray-200 rounded-lg p-2">
-                            <div className="flex flex-col">
-                                <label className='font-serif text-xl font-semibold'>Vörur</label>
-                                <select className='border border-blue rounded-lg h-10 w-2/5 mt-2 p-2'
-                                    onChange={(e) => handleChangeProduct(e.target.value)}
-                                    value={selectedProductType}
 
-                                >
-                                    <option value="">Select type</option>
-                                    <option value="cake">Kökur</option>
+                        {/* Add product */}
+                        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-4">
+                            <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Bæta við vöru</h2>
+
+                            <div>
+                                <Label>Tegund vöru</Label>
+                                <select className={inputCls} value={selectedProductType} onChange={e => setSelectedProductType(e.target.value)}>
+                                    <option value="">Veldu tegund</option>
+                                    <option value="cake">Kaka</option>
                                     <option value="bread">Brauð</option>
                                     <option value="minidonut">Minidonuts</option>
                                     <option value="other">Annað</option>
                                 </select>
                             </div>
-                            {selectedProductType === 'cake' && (
-                                <div className="flex flex-col mt-4">
-                                    <label className='font-serif text-xl'>Kaka:</label>
-                                    <select className='border border-blue rounded-lg h-10 w-2/5 p-2 mb-2'
-                                        onChange={handleCakeChange}
-                                        value={selectedCake}
-                                        required
-                                    >
-                                        <option value="">Veldu tegund</option>
-                                        {kokur.kokur.map((item) => (
-                                            <option key={item.id} value={item.name}>
-                                                {item.name}
-                                            </option>
-                                        ))}
-                                    </select>
 
-                                    {selectedCake && (
+                            {selectedProductType === 'cake' && (
+                                <div className="space-y-3">
+                                    <div>
+                                        <Label>Kaka</Label>
+                                        <select className={inputCls} value={selectedCake} onChange={handleCakeChange} required>
+                                            <option value="">Veldu kökutegund</option>
+                                            {kokur.kokur.map(item => <option key={item.id} value={item.name}>{item.name}</option>)}
+                                        </select>
+                                    </div>
+                                    {selectedKaka && (
                                         <>
-                                            <div className="flex flex-col w-full mb-2">
-                                                <label className="font-serif text-xl" htmlFor="size">Stærð:</label>
-                                                <select className="w-2/5 h-10 border border-blue rounded-lg font-serif text-lg" id="size" name="cake_size" onChange={handleSizeChange} value={cakeDetails.size} required>
+                                            <div>
+                                                <Label>Stærð</Label>
+                                                <select className={inputCls} value={cakeDetails.size} onChange={handleSizeChange} required>
                                                     <option value="">Veldu stærð</option>
-                                                    {kokur.kokur.find(item => item.name === selectedCake)?.size.map((sizeItem) => (
-                                                        <option key={sizeItem.size} value={sizeItem.size}>
-                                                            {sizeItem.size} - {sizeItem.price.toFixed(3)} kr.
-                                                        </option>
+                                                    {selectedKaka.size.map(s => (
+                                                        <option key={s.size} value={s.size}>{s.size} – {s.price.toFixed(0)} kr.</option>
                                                     ))}
                                                 </select>
                                             </div>
-                                            {kokur.kokur.find(item => item.name === selectedCake)?.fillings && (
-                                                <div className="flex flex-col w-full mb-2">
-                                                    <label className="font-serif text-xl" htmlFor="filling">Fylling:</label>
-                                                    <select className="w-2/5 h-10 mb-2 border border-blue rounded-lg font-serif text-lg" id="filling" name="filling" onChange={handleFillingChange} value={cakeDetails.filling}>
+                                            {selectedKaka.fillings && (
+                                                <div>
+                                                    <Label>Fylling</Label>
+                                                    <select className={inputCls} value={cakeDetails.filling} onChange={handleFillingChange}>
                                                         <option value="">Veldu fyllingu</option>
-                                                        {kokur.kokur.find(item => item.name === selectedCake)?.fillings.map((filling) => (
-                                                            <option key={filling} value={filling}>
-                                                                {filling}
-                                                            </option>
-                                                        ))}
+                                                        {selectedKaka.fillings.map(f => <option key={f} value={f}>{f}</option>)}
                                                     </select>
                                                 </div>
                                             )}
-                                            {kokur.kokur.find(item => item.name === selectedCake)?.botnar && (
-                                                <div className="flex flex-col w-full mb-2">
-                                                    <label className="text-white font-serif text-lg uppercase" htmlFor="bottom">Botn:</label>
-                                                    <select className="w-2/5 h-10 border border-blue rounded-lg font-serif text-lg" id="bottom" name="bottom" onChange={handleBottomChange} value={cakeDetails.bottom}>
+                                            {selectedKaka.botnar && (
+                                                <div>
+                                                    <Label>Botn</Label>
+                                                    <select className={inputCls} value={cakeDetails.bottom} onChange={handleBottomChange}>
                                                         <option value="">Veldu botn</option>
-                                                        {kokur.kokur.find(item => item.name === selectedCake)?.botnar.map((botn) => (
-                                                            <option key={botn} value={botn}>
-                                                                {botn}
-                                                            </option>
-                                                        ))}
+                                                        {selectedKaka.botnar.map(b => <option key={b} value={b}>{b}</option>)}
                                                     </select>
                                                 </div>
                                             )}
-                                            {kokur.kokur.find(item => item.name === selectedCake)?.smjorkrem && (
-                                                <div className="flex flex-col w-full">
-                                                    <label className="text-white font-serif text-lg uppercase" htmlFor="smjorkrem">Smjörkrem:</label>
-                                                    <select className="w-2/5 h-10 mb-2 border border-blue rounded-lg font-serif text-lg" id="smjorkrem" name="smjorkrem" onChange={handleSmjorkremChange} value={cakeDetails.smjorkrem}>
+                                            {selectedKaka.smjorkrem && (
+                                                <div>
+                                                    <Label>Smjörkrem</Label>
+                                                    <select className={inputCls} value={cakeDetails.smjorkrem} onChange={handleSmjorkremChange}>
                                                         <option value="">Veldu smjörkrem</option>
-                                                        {kokur.kokur.find(item => item.name === selectedCake)?.smjorkrem.map((smjorkrem) => (
-                                                            <option key={smjorkrem} value={smjorkrem}>
-                                                                {smjorkrem}
-                                                            </option>
-                                                        ))}
+                                                        {selectedKaka.smjorkrem.map(s => <option key={s} value={s}>{s}</option>)}
                                                     </select>
                                                 </div>
                                             )}
                                             {selectedCake === 'Afmælistertur' && (
-                                                <div className="flex flex-col w-full">
-                                                    <label className="text-white font-serif text-lg uppercase" htmlFor="url">Mynd:</label>
-                                                    <input type="url" className="w-full h-12 mb-2 p-1 border-none font-serif text-lg placeholder-black" id="url" name="url" onChange={handleUrlChange} value={cakeDetails.url} placeholder="Sláðu inn slóð" />
+                                                <div>
+                                                    <Label>Mynd (URL)</Label>
+                                                    <input className={inputCls} type="url" value={cakeDetails.url} onChange={handleUrlChange} placeholder="https://..." />
                                                 </div>
                                             )}
                                             {(selectedCake === 'Marsipantertur' || selectedCake === 'Smjörkremskaka') && (
-                                                    <>
-                                                        <div className="flex flex-col w-full mb-2">
-                                                            <label className="text-black font-serif text-lg" htmlFor="texti">Texti á köku:</label>
-                                                            <input 
-                                                                type="text" 
-                                                                className="w-2/5 h-12 mb-2 p-1 border border-blue rounded-lg font-serif text-lg placeholder-black" 
-                                                                id="texti" 
-                                                                name="texti" 
-                                                                onChange={handleTextChange} 
-                                                                value={selectedText}
-                                                            />
-                                                        </div>
-                                                        <div className="flex flex-col w-full mb-2">
-                                                            <label className="text-black font-serif text-lg" htmlFor="skreyting">Skreyting:</label>
-                                                            <input 
-                                                                type="skreyting" 
-                                                                className="w-2/5 h-12 mb-2 p-1 border border-blue rounded-lg font-serif text-lg placeholder-black" 
-                                                                id="skreyting" 
-                                                                name="skreyting" 
-                                                                onChange={handleSkreytingChange}
-                                                                value={selectedSkreyting}
-                                                            />
-                                                        </div>
-                                                    </>
-                                                )}
+                                                <>
+                                                    <div>
+                                                        <Label>Texti á köku</Label>
+                                                        <input className={inputCls} type="text" value={selectedText} onChange={handleTextChange} />
+                                                    </div>
+                                                    <div>
+                                                        <Label>Skreyting</Label>
+                                                        <input className={inputCls} type="text" value={selectedSkreyting} onChange={handleSkreytingChange} />
+                                                    </div>
+                                                </>
+                                            )}
                                         </>
                                     )}
                                 </div>
                             )}
+
                             {selectedProductType === 'bread' && (
-                                <div className="flex flex-col mt-4">
-                                    <label className='font-serif text-xl'>Brauðupplýsingar</label>
-                                    <label className='font-serif text-xl'>Tegund:</label>
-                                    <input className='border border-blue rounded-lg h-8 w-2/5 mt-2 p-2' type="text" placeholder='Veldu tegund' onChange={(e) => setProductType(e.target.value)} value={productType} required />
-                                    <label className='font-serif text-xl'>Magn:</label>
-                                    <input className='border border-blue rounded-lg h-8 w-2/5 mt-2 p-2' type="number" placeholder='Veldu magn' onChange={(e) => setQuantity(e.target.value)} value={quantity} required />
+                                <div className="space-y-3">
+                                    <div>
+                                        <Label>Tegund brauðs</Label>
+                                        <input className={inputCls} type="text" value={productType} onChange={e => setProductType(e.target.value)} required />
+                                    </div>
+                                    <div>
+                                        <Label>Magn</Label>
+                                        <input className={inputCls} type="number" min="1" value={quantity} onChange={e => setQuantity(e.target.value)} required />
+                                    </div>
                                 </div>
                             )}
+
                             {selectedProductType === 'minidonut' && (
-                                <div className="flex flex-col mt-4">
-                                    <label className='font-serif text-xl'>Minidonuts</label>
-                                    <input className='border border-blue rounded-lg h-8 w-2/5 mt-2 p-2' type="number" placeholder='Magn' onChange={(e) => setQuantity(e.target.value)} value={quantity} required />
+                                <div>
+                                    <Label>Magn</Label>
+                                    <input className={inputCls} type="number" min="1" value={quantity} onChange={e => setQuantity(e.target.value)} required />
                                 </div>
                             )}
+
                             {selectedProductType === 'other' && (
-                                <div className="flex flex-col mt-4">
-                                    <label className='font-serif text-xl'>Annað</label>
-                                    <input className='border border-blue rounded-lg h-8 w-2/5 mt-2 p-2' placeholder='Skrifaðu niður vöru' type="text" value={productType} onChange={(e) => setProductType(e.target.value)} required />
-                                    <label className='font-serif text-xl mt-2'>Magn:</label>
-                                    <input className='border border-blue rounded-lg h-8 w-2/5 mt-2 p-2' type="number" placeholder='Veldu magn' onChange={(e) => setQuantity(e.target.value)} value={quantity} required />
+                                <div className="space-y-3">
+                                    <div>
+                                        <Label>Vöruheiti</Label>
+                                        <input className={inputCls} type="text" value={productType} onChange={e => setProductType(e.target.value)} required />
+                                    </div>
+                                    <div>
+                                        <Label>Magn</Label>
+                                        <input className={inputCls} type="number" min="1" value={quantity} onChange={e => setQuantity(e.target.value)} required />
+                                    </div>
                                 </div>
+                            )}
 
+                            {selectedProductType && (
+                                <button
+                                    type="button"
+                                    onClick={handleAddProduct}
+                                    className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium py-2 rounded-lg transition-colors"
+                                >
+                                    + Bæta vöru við pöntun
+                                </button>
                             )}
                         </div>
 
-                        <button type="button" className="flex font-serif text-white text-lg mt-5 items-center justify-center h-8 w-25 bg-blue-500 rounded-lg hover:bg-blue-600" onClick={handleAddProduct}>
-                            Bæta við Vöru
+                        <button
+                            type="submit"
+                            className="w-full bg-amber-600 hover:bg-amber-700 text-white font-medium py-2.5 rounded-lg text-sm transition-colors"
+                        >
+                            Vista pöntun
                         </button>
+                    </div>
 
-                        <button type="submit" className="flex font-serif text-white text-lg mt-5 items-center justify-center h-8 w-25 bg-blue-500 rounded-lg hover:bg-blue-600">Bæta við Pöntun</button>
-                    </form>
-                </div>
-
-                {/* Products List */}
-                {/* Products List */}
-                <div className="products-list bg-gray-200 rounded-lg p-2 md:w-1/3 mt-6 md:mt-0 md:ml-6">
-                    <h2 className="text-2xl font-bold mb-4">Pöntun</h2>
-                    {products.length > 0 ? (
-                        <div className="flex flex-col w-full max-w-4xl border-2 border-blue-700 rounded-lg p-4 space-y-4 bg-white shadow-lg">
-                            {products.map((product, index) => (
-                                <div key={index} className="flex flex-col border border-blue-700 rounded-lg p-4 space-y-4 bg-gray-100">
-                                    <p>
-                                        <strong>Type:</strong> {product.type} <br />
-                                        {Object.entries(product.details).map(([key, value]) => {
-                                            const displayValue = typeof value === 'object' ? JSON.stringify(value) : value;
-                                            return (
-                                                <span key={key}><strong>{key}:</strong> {displayValue} <br /></span>
-                                            );
-                                        })}
-                                    </p>
-                                </div>
-                            ))}
-                        </div>
-                    ) : (
-                        <p className='font-serif font-lg'>Engar vörur komnar í pöntun...</p>
-                    )}
-                </div>
-            </div>
+                    {/* Order summary */}
+                    <div className="w-72 bg-white rounded-xl shadow-sm border border-gray-100 p-6 sticky top-8">
+                        <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4">Pöntun</h2>
+                        {products.length > 0 ? (
+                            <ul className="space-y-2">
+                                {products.map((product, index) => (
+                                    <li key={index} className="bg-amber-50 border border-amber-100 rounded-lg px-3 py-2">
+                                        <span className="text-xs font-semibold text-amber-700 uppercase">{product.type}</span>
+                                        <div className="mt-1">
+                                            {Object.entries(product.details).map(([key, value]) =>
+                                                value ? (
+                                                    <span key={key} className="block text-xs text-gray-600">
+                                                        {key}: {typeof value === 'object' ? JSON.stringify(value) : value}
+                                                    </span>
+                                                ) : null
+                                            )}
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                        ) : (
+                            <p className="text-xs text-gray-400">Engar vörur komnar í pöntun</p>
+                        )}
+                    </div>
+                </form>
+            </main>
         </div>
     );
 };
