@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Sidebar from '../Sidebar';
+import ProductForm from '../ProductForm';
 import axios from 'axios';
 import { useAlert } from '../Alert/AlertContext';
 
@@ -13,24 +14,21 @@ const formatDate = (date) => {
     return `${parsed.getDate()} ${months[parsed.getMonth()]}`;
 };
 
-const formatProducts = (order) => {
-    if (!order?.products) return [];
-    return order.products.map((product) => {
-        switch (product.type) {
-            case 'cake': {
-                const c = product.details;
-                if (c.cake === 'Sykurmassamynd') return c.cake;
-                return `${c.cake} – Stærð: ${c.size}${c.filling ? `, Fylling: ${c.filling}` : ''}${c.bottom ? `, Botn: ${c.bottom}` : ''}${c.smjorkrem ? `, Smjörkrem: ${c.smjorkrem}` : ''}${c.text ? `, Texti: ${c.text}` : ''}${c.skreyting ? `, Skreyting: ${c.skreyting}` : ''}`;
-            }
-            case 'bread': return `${product.details.bread} – Magn: ${product.details.quantity}`;
-            case 'minidonut': return `Minidonuts – Magn: ${product.details.quantity}`;
-            case 'bite': {
-                const b = product.details;
-                return `${b.name}${b.description ? ` (${b.description})` : ''} – Magn: ${b.quantity}`;
-            }
-            default: return `${product.details.other} – Magn: ${product.details.quantity}`;
+const formatSingleProduct = (product) => {
+    switch (product.type) {
+        case 'cake': {
+            const c = product.details;
+            if (c.cake === 'Sykurmassamynd') return c.cake;
+            return `${c.cake} – Stærð: ${c.size}${c.filling ? `, Fylling: ${c.filling}` : ''}${c.bottom ? `, Botn: ${c.bottom}` : ''}${c.smjorkrem ? `, Smjörkrem: ${c.smjorkrem}` : ''}${c.text ? `, Texti: ${c.text}` : ''}${c.skreyting ? `, Skreyting: ${c.skreyting}` : ''}`;
         }
-    });
+        case 'bread': return `${product.details.bread} – Magn: ${product.details.quantity}`;
+        case 'minidonut': return `Minidonuts – Magn: ${product.details.quantity}`;
+        case 'bite': {
+            const b = product.details;
+            return `Smáréttur: ${b.name} – Magn: ${b.quantity}`;
+        }
+        default: return `${product.details?.other || product.details?.name || 'Vara'} – Magn: ${product.details?.quantity ?? 0}`;
+    }
 };
 
 const OrderView = () => {
@@ -67,6 +65,20 @@ const OrderView = () => {
         setEditedOrder(prev => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
     };
 
+    const handleRemoveProduct = (index) => {
+        setEditedOrder(prev => ({
+            ...prev,
+            products: prev.products.filter((_, i) => i !== index),
+        }));
+    };
+
+    const handleAddProduct = (product) => {
+        setEditedOrder(prev => ({
+            ...prev,
+            products: [...(prev.products || []), product],
+        }));
+    };
+
     const handleSaveChanges = async () => {
         try {
             await axios.put(`https://api.kallabakari.is/api/orders/${orderId}`, editedOrder);
@@ -76,6 +88,11 @@ const OrderView = () => {
         } catch {
             showAlert('Það mistókst að uppfæra pöntunina', 'error');
         }
+    };
+
+    const handleCancelEdit = () => {
+        setEditedOrder(order);
+        setIsEditing(false);
     };
 
     if (!order) {
@@ -150,13 +167,40 @@ const OrderView = () => {
                     {/* Products */}
                     <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                         <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4">Vörur</h2>
-                        <ul className="space-y-2">
-                            {formatProducts(order).map((product, index) => (
-                                <li key={index} className="text-sm text-gray-700 bg-amber-50 border border-amber-100 rounded-lg px-3 py-2">
-                                    {product}
-                                </li>
-                            ))}
-                        </ul>
+                        {isEditing ? (
+                            <div className="space-y-3">
+                                {(editedOrder.products || []).length > 0 ? (
+                                    <ul className="space-y-2">
+                                        {(editedOrder.products || []).map((product, index) => (
+                                            <li key={index} className="flex items-center justify-between bg-amber-50 border border-amber-100 rounded-lg px-3 py-2 gap-2">
+                                                <span className="text-sm text-gray-700">{formatSingleProduct(product)}</span>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleRemoveProduct(index)}
+                                                    className="text-red-400 hover:text-red-600 text-xs flex-shrink-0"
+                                                >
+                                                    Fjarlægja
+                                                </button>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                ) : (
+                                    <p className="text-xs text-gray-400 mb-2">Engar vörur í pöntun</p>
+                                )}
+                                <div className="border-t border-gray-100 pt-3">
+                                    <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Bæta við vöru</p>
+                                    <ProductForm onAdd={handleAddProduct} />
+                                </div>
+                            </div>
+                        ) : (
+                            <ul className="space-y-2">
+                                {(order.products || []).map((product, index) => (
+                                    <li key={index} className="text-sm text-gray-700 bg-amber-50 border border-amber-100 rounded-lg px-3 py-2">
+                                        {formatSingleProduct(product)}
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
                     </div>
 
                     {/* Image download */}
@@ -180,7 +224,7 @@ const OrderView = () => {
                                 <button onClick={handleSaveChanges} className="bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors">
                                     Vista
                                 </button>
-                                <button onClick={() => setIsEditing(false)} className="bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium px-4 py-2 rounded-lg transition-colors">
+                                <button onClick={handleCancelEdit} className="bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium px-4 py-2 rounded-lg transition-colors">
                                     Hætta við
                                 </button>
                             </>
