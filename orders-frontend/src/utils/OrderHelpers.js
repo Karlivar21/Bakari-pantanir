@@ -4,8 +4,6 @@ export const formatProducts = (order) => {
   const orderProducts =
     typeof order.products === "string" ? JSON.parse(order.products) : order.products;
 
-  let hasBites = false;
-
   (orderProducts ?? []).forEach((product) => {
     switch (product.type) {
       case "cake": {
@@ -36,7 +34,8 @@ export const formatProducts = (order) => {
       }
 
       case "bite": {
-        hasBites = true; // mark that this order contains smáréttir
+        const b = product.details;
+        products.push(`Smáréttur: ${b.name}${b.description ? ` (${b.description})` : ''} - Magn: ${b.quantity}`);
         break;
       }
 
@@ -47,11 +46,6 @@ export const formatProducts = (order) => {
       }
     }
   });
-
-  // Add ONE line for all bites
-  if (hasBites) {
-    products.push("Smáréttapöntun");
-  }
 
   return products;
 };

@@ -25,7 +25,7 @@ const formatSingleProduct = (product) => {
         case 'minidonut': return `Minidonuts – Magn: ${product.details.quantity}`;
         case 'bite': {
             const b = product.details;
-            return `Smáréttur: ${b.name} – Magn: ${b.quantity}`;
+            return `Smáréttur: ${b.name}${b.description ? ` (${b.description})` : ''} – Magn: ${b.quantity}`;
         }
         default: return `${product.details?.other || product.details?.name || 'Vara'} – Magn: ${product.details?.quantity ?? 0}`;
     }
