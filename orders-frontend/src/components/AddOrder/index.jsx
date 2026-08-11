@@ -20,11 +20,28 @@ const formatProduct = (product) => {
     }
 };
 
+function getPickupSlots(dateStr) {
+    if (!dateStr) return [];
+    const date = new Date(dateStr);
+    const day = date.getDay();
+    const isWeekend = day === 0 || day === 6;
+    const startMin = isWeekend ? 8 * 60 : 7 * 60;
+    const endMin = isWeekend ? 15 * 60 : 16 * 60;
+    const slots = [];
+    for (let m = startMin; m <= endMin; m += 30) {
+        const h = String(Math.floor(m / 60)).padStart(2, '0');
+        const min = String(m % 60).padStart(2, '0');
+        slots.push(`${h}:${min}`);
+    }
+    return slots;
+}
+
 const AddOrder = () => {
     const [name, setName] = useState('');
     const [phone, setPhone] = useState('');
     const [email, setEmail] = useState('');
     const [date, setDate] = useState('');
+    const [pickupTime, setPickupTime] = useState('');
     const [products, setProducts] = useState([]);
     const [userMessage, setUserMessage] = useState('');
     const navigate = useNavigate();
@@ -37,6 +54,7 @@ const AddOrder = () => {
         formData.append('phone', phone);
         formData.append('email', email);
         formData.append('date', date);
+        formData.append('pickupTime', pickupTime);
         formData.append('products', JSON.stringify(products));
         formData.append('user_message', userMessage);
         formData.append('payed', false);
@@ -77,7 +95,16 @@ const AddOrder = () => {
                                 </div>
                                 <div>
                                     <Label>Dagsetning</Label>
-                                    <input className={inputCls} type="date" value={date} onChange={e => setDate(e.target.value)} required />
+                                    <input className={inputCls} type="date" value={date} onChange={e => { setDate(e.target.value); setPickupTime(''); }} required />
+                                </div>
+                                <div>
+                                    <Label>Sóttnartími</Label>
+                                    <select className={inputCls} value={pickupTime} onChange={e => setPickupTime(e.target.value)} disabled={!date}>
+                                        <option value="">{date ? 'Veldu tíma' : 'Veldu fyrst dagsetningu'}</option>
+                                        {getPickupSlots(date).map(slot => (
+                                            <option key={slot} value={slot}>{slot}</option>
+                                        ))}
+                                    </select>
                                 </div>
                             </div>
                             <div>

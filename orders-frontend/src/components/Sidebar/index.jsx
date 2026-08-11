@@ -17,7 +17,7 @@ const Sidebar = () => {
     return (
         <div className="flex flex-col w-56 min-h-screen bg-gray-900 flex-shrink-0">
             <div className="px-5 py-6 border-b border-gray-700/60">
-                <p className="font-serif text-amber-400 text-lg font-bold tracking-wide">Kalla Bakari</p>
+                <p className="font-serif text-amber-400 text-lg font-bold tracking-wide">Kalla Bakarí</p>
                 <p className="text-gray-500 text-xs mt-0.5">Pantanakerfi</p>
             </div>
 

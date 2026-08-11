@@ -127,6 +127,7 @@ const OrderView = () => {
                                 <input className={inputCls} type="text" name="phone" value={editedOrder.phone || ''} onChange={handleInputChange} placeholder="Sími" />
                                 <input className={inputCls} type="email" name="email" value={editedOrder.email || ''} onChange={handleInputChange} placeholder="Netfang" />
                                 <input className={inputCls} type="date" name="date" value={editedOrder.date ? new Date(editedOrder.date).toISOString().split('T')[0] : ''} onChange={handleInputChange} />
+                                <input className={inputCls} type="text" name="pickupTime" value={editedOrder.pickupTime || ''} onChange={handleInputChange} placeholder="Sóttnartími (t.d. 10:30)" />
                                 <textarea className={`${inputCls} resize-none`} name="user_message" value={editedOrder.user_message || ''} onChange={handleInputChange} placeholder="Athugasemd" rows={3} />
                                 <label className="flex items-center gap-2 text-sm text-gray-700">
                                     <input type="checkbox" name="payed" checked={editedOrder.payed || false} onChange={handleInputChange} className="rounded accent-amber-500" />
@@ -140,6 +141,7 @@ const OrderView = () => {
                                     { label: 'Sími', value: order.phone },
                                     { label: 'Netfang', value: order.email },
                                     { label: 'Dagsetning', value: formatDate(new Date(order.date).toLocaleDateString()) },
+                                    { label: 'Sóttnartími', value: order.pickupTime || '—' },
                                 ].map(({ label, value, bold }) => (
                                     <div key={label} className="flex">
                                         <dt className="w-28 text-sm text-gray-400">{label}</dt>

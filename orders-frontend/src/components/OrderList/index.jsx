@@ -71,6 +71,7 @@ const OrderList = () => {
                                 <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Sími</th>
                                 <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Netfang</th>
                                 <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Dagsetning</th>
+                                <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Sóttnartími</th>
                                 <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Greitt</th>
                                 <th className="px-5 py-3"></th>
                             </tr>
@@ -83,6 +84,9 @@ const OrderList = () => {
                                     <td className="px-5 py-3.5 text-sm text-gray-500">{order.email}</td>
                                     <td className="px-5 py-3.5 text-sm text-gray-500">
                                         {formatDate(new Date(order.date).toLocaleDateString())}
+                                    </td>
+                                    <td className="px-5 py-3.5 text-sm text-gray-500">
+                                        {order.pickupTime || '—'}
                                     </td>
                                     <td className="px-5 py-3.5">
                                         <span className={`inline-flex text-xs font-medium px-2 py-0.5 rounded-full ${
