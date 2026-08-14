@@ -7,6 +7,8 @@ const navItems = [
     { label: 'Pantanir', path: '/orders' },
     { label: 'Súpuplan', path: '/supuplan' },
     { label: 'Athugasemdir', path: '/comment' },
+    { label: 'Fyrirtæki', path: '/companies' },
+    { label: 'Fyrirtækjapantanir', path: '/company-orders' },
 ];
 
 const Sidebar = () => {

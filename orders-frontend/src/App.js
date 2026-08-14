@@ -11,6 +11,8 @@ import PrivateRoute from './routes/PrivateRoute';
 import AuthInitializer from './auth/AuthInit'; // Import AuthInitializer
 import OrderView from './components/Order';
 import Comment from './components/Comment';
+import Companies from './components/Companies';
+import CompanyOrders from './components/CompanyOrders';
 import { AlertProvider } from './components/Alert/AlertContext';
 import './index.css'; // Import Tailwind CSS
 
@@ -30,6 +32,8 @@ const App = () => {
                                 <Route path="/add-order" element={<AddOrder />} />
                                 <Route path="/order/:orderId" element={<OrderView />} />
                                 <Route path="/comment" element={<Comment />} />
+                                <Route path="/companies" element={<Companies />} />
+                                <Route path="/company-orders" element={<CompanyOrders />} />
                             </Route>
                         </Routes>
                     </div>
