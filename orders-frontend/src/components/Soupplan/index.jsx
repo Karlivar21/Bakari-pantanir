@@ -5,8 +5,8 @@ import { useAlert } from '../Alert/AlertContext';
 
 const soupOptions = [
   'Aspassúpa', 'Blaðlaukssúpa', 'Blómkálssúpa', 'Brokkólísúpa', 'Brauðsúpa', 'Fiskisúpa',
-  'Gulrótarsúpa', 'Graskerssúpa', 'Íslensk Kjötsúpa', 'Mexíkósk Kjúklingasúpa', 'Paprikusúpa',
-  'Rjómalöguð Sveppasúpa', 'Sætkartöflusúpa', 'Tómatsúpa', 'Tælensk Núðlusúpa',
+  'Gulrótarsúpa', 'Graskerssúpa', 'Íslensk kjötsúpa', 'Mexíkósk kjúklingasúpa', 'Paprikusúpa',
+  'Rjómalöguð sveppasúpa', 'Sætkartöflusúpa', 'Tómatsúpa', 'Tælensk núðlusúpa',
 ];
 
 const days = ['Mánudagur', 'Þriðjudagur', 'Miðvikudagur', 'Fimmtudagur', 'Föstudagur'];
