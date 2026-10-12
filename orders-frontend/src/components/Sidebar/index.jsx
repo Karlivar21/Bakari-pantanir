@@ -5,6 +5,7 @@ import { AuthContext } from '../../auth/AuthContext';
 const navItems = [
     { label: 'Heim', path: '/' },
     { label: 'Pantanir', path: '/orders' },
+    { label: 'Allar pantanir', path: '/all-orders' },
     { label: 'Súpuplan', path: '/supuplan' },
     { label: 'Athugasemdir', path: '/comment' },
     { label: 'Fyrirtæki', path: '/companies' },

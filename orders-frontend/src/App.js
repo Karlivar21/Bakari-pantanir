@@ -13,6 +13,7 @@ import OrderView from './components/Order';
 import Comment from './components/Comment';
 import Companies from './components/Companies';
 import CompanyOrders from './components/CompanyOrders';
+import AllOrders from './components/AllOrders';
 import { AlertProvider } from './components/Alert/AlertContext';
 import './index.css'; // Import Tailwind CSS
 
@@ -34,6 +35,7 @@ const App = () => {
                                 <Route path="/comment" element={<Comment />} />
                                 <Route path="/companies" element={<Companies />} />
                                 <Route path="/company-orders" element={<CompanyOrders />} />
+                                <Route path="/all-orders" element={<AllOrders />} />
                             </Route>
                         </Routes>
                     </div>
