@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { AuthContext } from '../../auth/AuthContext';
-import coverlogo from '../../resources/coverlogo3.png';
+import coverlogo from '../../resources/coverlogo.png';
 import { registerPushNotifications } from '../../utils/pushNotifications';
 
 const SignIn = () => {
