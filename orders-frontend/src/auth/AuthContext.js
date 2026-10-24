@@ -5,8 +5,8 @@ import { useNavigate } from 'react-router-dom';
 const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [token, setToken] = useState('');
+    const [isLoggedIn, setIsLoggedIn] = useState(() => !!localStorage.getItem('token'));
+    const [token, setToken] = useState(() => localStorage.getItem('token') || '');
     const navigate = useNavigate();
 
     const login = (authToken) => {
