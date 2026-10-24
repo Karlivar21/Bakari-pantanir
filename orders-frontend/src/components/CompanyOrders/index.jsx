@@ -16,14 +16,14 @@ const formatDate = (dateStr) => {
 
 function formatSingleProduct(p) {
     switch (p.type) {
-        case 'cake': return `${p.details.cake}${p.details.size ? ` (${p.details.size})` : ''}`;
-        case 'bread': return `${p.details.bread} × ${p.details.quantity}`;
-        case 'minidonut': return `Minidonuts × ${p.details.quantity}`;
+        case 'cake':     return `${p.details.cake}${p.details.size ? ` (${p.details.size})` : ''}`;
+        case 'bread':    return `${p.details.bread} × ${p.details.quantity}`;
+        case 'minidonut':return `Minidonuts × ${p.details.quantity}`;
         case 'bite':     return `${p.details.name} × ${p.details.quantity}`;
         case 'bakkelsi': return `${p.details.name} × ${p.details.quantity}`;
         case 'salat':    return `${p.details.name} × ${p.details.quantity}`;
         case 'supa':     return `Súpa dagsins × ${p.details.quantity}`;
-        default: return `${p.details.other || p.details.name || 'Vara'} × ${p.details.quantity ?? 1}`;
+        default:         return `${p.details.other || p.details.name || 'Vara'} × ${p.details.quantity ?? 1}`;
     }
 }
 
@@ -34,7 +34,6 @@ const STATUS_CLS = {
     completed: 'bg-emerald-50 text-emerald-700',
     cancelled: 'bg-red-50 text-red-600',
 };
-
 const STATUSES = ['pending', 'confirmed', 'completed', 'cancelled'];
 
 export default function CompanyOrders() {
@@ -68,88 +67,121 @@ export default function CompanyOrders() {
         }
     };
 
+    const sorted = orders.slice().reverse();
+
+    const StatusSelect = ({ order }) => (
+        <select
+            value={order.status}
+            disabled={updatingId === order._id}
+            onChange={e => handleStatusChange(order._id, e.target.value)}
+            className={`text-xs font-medium px-2 py-1 rounded-lg border-0 focus:ring-2 focus:ring-amber-300 ${STATUS_CLS[order.status] || ''}`}
+        >
+            {STATUSES.map(s => <option key={s} value={s}>{STATUS_LABELS[s]}</option>)}
+        </select>
+    );
+
+    const ProductList = ({ order }) => (
+        <>
+            <ul className="mt-2 space-y-1">
+                {order.products.map((p, i) => (
+                    <li key={i} className="text-xs text-gray-700 bg-gray-50 border border-amber-100 rounded-lg px-3 py-2">
+                        {formatSingleProduct(p)}
+                    </li>
+                ))}
+            </ul>
+            {order.note && <p className="text-xs text-gray-400 italic mt-2">"{order.note}"</p>}
+        </>
+    );
+
     return (
         <div className="flex min-h-screen bg-gray-50">
             <Sidebar />
             <main className="flex-1 p-4 pt-[4.5rem] md:p-8 md:pt-8">
                 <h1 className="text-xl font-semibold text-gray-900 mb-6">Fyrirtækjapantanir</h1>
 
-                <div className="overflow-x-auto bg-white rounded-xl shadow-sm border border-gray-100">
-                    <table className="w-full">
-                        <thead>
-                            <tr className="bg-gray-50 border-b border-gray-100">
-                                <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Fyrirtæki</th>
-                                <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Dagsetning</th>
-                                <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Afhending</th>
-                                <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Upphæð</th>
-                                <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Staða</th>
-                                <th className="px-5 py-3" />
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-gray-50">
-                            {loading ? (
-                                <tr><td colSpan={6} className="px-5 py-8 text-sm text-gray-400 text-center">Hleður...</td></tr>
-                            ) : orders.length === 0 ? (
-                                <tr><td colSpan={6} className="px-5 py-8 text-sm text-gray-400 text-center">Engar fyrirtækjapantanir</td></tr>
-                            ) : orders.slice().reverse().map(order => (
-                                <React.Fragment key={order._id}>
-                                    <tr className="hover:bg-amber-50/30 transition-colors">
-                                        <td className="px-5 py-3.5 text-sm font-medium text-gray-900">
+                {loading && <p className="text-sm text-gray-400">Hleður...</p>}
+
+                {/* Mobile cards */}
+                {!loading && (
+                    <div className="md:hidden space-y-3">
+                        {sorted.length === 0 ? (
+                            <p className="text-sm text-gray-400 text-center py-8">Engar fyrirtækjapantanir</p>
+                        ) : sorted.map(order => (
+                            <div key={order._id} className="bg-white rounded-xl border border-gray-100 shadow-sm p-4">
+                                <div className="flex items-start justify-between gap-3">
+                                    <div className="min-w-0">
+                                        <p className="font-semibold text-gray-900 text-sm truncate">
                                             {order.companyId?.name || '—'}
-                                        </td>
-                                        <td className="px-5 py-3.5 text-sm text-gray-500">
+                                        </p>
+                                        <p className="text-xs text-gray-400 mt-0.5">
                                             {formatDate(order.date)}
-                                        </td>
-                                        <td className="px-5 py-3.5 text-sm text-gray-500">
-                                            {order.pickupTime
-                                                ? `${order.deliveryType === 'delivery' ? 'Sent' : 'Sótt'} kl. ${order.pickupTime}`
-                                                : '—'}
-                                        </td>
-                                        <td className="px-5 py-3.5 text-sm text-gray-500">
-                                            {formatISK(order.totalAmount)}
-                                        </td>
-                                        <td className="px-5 py-3.5">
-                                            <select
-                                                value={order.status}
-                                                disabled={updatingId === order._id}
-                                                onChange={e => handleStatusChange(order._id, e.target.value)}
-                                                className={`text-xs font-medium px-2 py-1 rounded-lg border-0 focus:ring-2 focus:ring-amber-300 ${STATUS_CLS[order.status] || ''}`}
-                                            >
-                                                {STATUSES.map(s => (
-                                                    <option key={s} value={s}>{STATUS_LABELS[s]}</option>
-                                                ))}
-                                            </select>
-                                        </td>
-                                        <td className="px-5 py-3.5 text-right">
-                                            <button
-                                                onClick={() => setExpanded(expanded === order._id ? null : order._id)}
-                                                className="text-xs font-medium text-amber-700 hover:text-amber-900 transition-colors"
-                                            >
-                                                {expanded === order._id ? 'Loka ▲' : 'Vörur ▼'}
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    {expanded === order._id && (
-                                        <tr>
-                                            <td colSpan={6} className="px-5 pb-4 bg-amber-50/30">
-                                                <ul className="space-y-1 pt-2">
-                                                    {order.products.map((p, i) => (
-                                                        <li key={i} className="text-sm text-gray-700 bg-white border border-amber-100 rounded-lg px-3 py-2">
-                                                            {formatSingleProduct(p)}
-                                                        </li>
-                                                    ))}
-                                                </ul>
-                                                {order.note && (
-                                                    <p className="text-xs text-gray-400 italic mt-2 px-1">"{order.note}"</p>
-                                                )}
+                                            {order.pickupTime ? ` · ${order.deliveryType === 'delivery' ? 'Sent' : 'Sótt'} kl. ${order.pickupTime}` : ''}
+                                        </p>
+                                        <p className="text-xs text-gray-400">{formatISK(order.totalAmount)}</p>
+                                    </div>
+                                    <StatusSelect order={order} />
+                                </div>
+                                <button
+                                    onClick={() => setExpanded(expanded === order._id ? null : order._id)}
+                                    className="mt-3 w-full bg-amber-50 hover:bg-amber-100 text-amber-700 text-xs font-medium py-2 rounded-lg transition-colors"
+                                >
+                                    {expanded === order._id ? 'Loka ▲' : 'Sýna vörur ▼'}
+                                </button>
+                                {expanded === order._id && <ProductList order={order} />}
+                            </div>
+                        ))}
+                    </div>
+                )}
+
+                {/* Desktop table */}
+                {!loading && (
+                    <div className="hidden md:block bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                        <table className="w-full">
+                            <thead>
+                                <tr className="bg-gray-50 border-b border-gray-100">
+                                    <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Fyrirtæki</th>
+                                    <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Dagsetning</th>
+                                    <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Afhending</th>
+                                    <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Upphæð</th>
+                                    <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Staða</th>
+                                    <th className="px-5 py-3" />
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-gray-50">
+                                {sorted.length === 0 ? (
+                                    <tr><td colSpan={6} className="px-5 py-8 text-sm text-gray-400 text-center">Engar fyrirtækjapantanir</td></tr>
+                                ) : sorted.map(order => (
+                                    <React.Fragment key={order._id}>
+                                        <tr className="hover:bg-amber-50/30 transition-colors">
+                                            <td className="px-5 py-3.5 text-sm font-medium text-gray-900">{order.companyId?.name || '—'}</td>
+                                            <td className="px-5 py-3.5 text-sm text-gray-500">{formatDate(order.date)}</td>
+                                            <td className="px-5 py-3.5 text-sm text-gray-500">
+                                                {order.pickupTime ? `${order.deliveryType === 'delivery' ? 'Sent' : 'Sótt'} kl. ${order.pickupTime}` : '—'}
+                                            </td>
+                                            <td className="px-5 py-3.5 text-sm text-gray-500">{formatISK(order.totalAmount)}</td>
+                                            <td className="px-5 py-3.5"><StatusSelect order={order} /></td>
+                                            <td className="px-5 py-3.5 text-right">
+                                                <button
+                                                    onClick={() => setExpanded(expanded === order._id ? null : order._id)}
+                                                    className="text-xs font-medium text-amber-700 hover:text-amber-900 transition-colors"
+                                                >
+                                                    {expanded === order._id ? 'Loka ▲' : 'Vörur ▼'}
+                                                </button>
                                             </td>
                                         </tr>
-                                    )}
-                                </React.Fragment>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
+                                        {expanded === order._id && (
+                                            <tr>
+                                                <td colSpan={6} className="px-5 pb-4 bg-amber-50/30">
+                                                    <ProductList order={order} />
+                                                </td>
+                                            </tr>
+                                        )}
+                                    </React.Fragment>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                )}
             </main>
         </div>
     );

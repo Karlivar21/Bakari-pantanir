@@ -17,7 +17,21 @@ const Comment = () => {
             <main className="flex-1 p-4 pt-[4.5rem] md:p-8 md:pt-8">
                 <h1 className="text-xl font-semibold text-gray-900 mb-6">Athugasemdir</h1>
 
-                <div className="overflow-x-auto bg-white rounded-xl shadow-sm border border-gray-100">
+                {/* Mobile cards */}
+                <div className="md:hidden space-y-3">
+                    {comments.length === 0 ? (
+                        <p className="text-sm text-gray-400 text-center py-8">Engar athugasemdir fundust</p>
+                    ) : comments.map((comment) => (
+                        <div key={comment.id} className="bg-white rounded-xl border border-gray-100 shadow-sm p-4">
+                            <p className="font-semibold text-gray-900 text-sm">{comment.name}</p>
+                            <p className="text-xs text-gray-400 mt-0.5">{comment.phone} · {comment.email}</p>
+                            <p className="text-sm text-gray-600 mt-2">{comment.message}</p>
+                        </div>
+                    ))}
+                </div>
+
+                {/* Desktop table */}
+                <div className="hidden md:block bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                     <table className="w-full">
                         <thead>
                             <tr className="bg-gray-50 border-b border-gray-100">

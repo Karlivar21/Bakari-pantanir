@@ -113,53 +113,32 @@ export default function AllOrders() {
                     </div>
                 </div>
 
-                <div className="overflow-x-auto bg-white rounded-xl shadow-sm border border-gray-100">
-                    <table className="w-full">
-                        <thead>
-                            <tr className="bg-gray-50 border-b border-gray-100">
-                                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Tegund</th>
-                                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Nafn</th>
-                                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Dagsetning</th>
-                                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Sótt</th>
-                                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Upphæð</th>
-                                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Staða</th>
-                                <th className="px-4 py-3" />
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-gray-50">
-                            {loading ? (
-                                <tr><td colSpan={7} className="px-5 py-8 text-sm text-gray-400 text-center">Hleður...</td></tr>
-                            ) : visible.length === 0 ? (
-                                <tr><td colSpan={7} className="px-5 py-8 text-sm text-gray-400 text-center">Engar pantanir</td></tr>
-                            ) : visible.map(order => (
-                                <React.Fragment key={order._id}>
-                                    <tr className="hover:bg-amber-50/30 transition-colors">
-                                        <td className="px-4 py-3.5">
-                                            <span className={`inline-flex text-xs font-medium px-2 py-0.5 rounded-full ${
-                                                order._kind === 'online'
-                                                    ? 'bg-purple-50 text-purple-700'
-                                                    : 'bg-sky-50 text-sky-700'
-                                            }`}>
-                                                {order._kind === 'online' ? 'Vefpöntun' : 'Fyrirtæki'}
-                                            </span>
-                                        </td>
-                                        <td className="px-4 py-3.5 text-sm font-medium text-gray-900">
-                                            {order._kind === 'online' ? order.name : order.companyId?.name || '—'}
-                                        </td>
-                                        <td className="px-4 py-3.5 text-sm text-gray-500">
-                                            {formatDate(order.date)}
-                                        </td>
-                                        <td className="px-4 py-3.5 text-sm text-gray-500">
-                                            {order.pickupTime
-                                                ? `${order._kind === 'company' && order.deliveryType === 'delivery' ? 'Sent' : 'Sótt'} ${order.pickupTime}`
-                                                : '—'}
-                                        </td>
-                                        <td className="px-4 py-3.5 text-sm text-gray-500">
-                                            {formatISK(order.totalAmount)}
-                                        </td>
-                                        <td className="px-4 py-3.5">
+                {/* Mobile cards */}
+                {loading ? (
+                    <p className="text-sm text-gray-400 text-center py-8">Hleður...</p>
+                ) : (
+                    <>
+                        <div className="md:hidden space-y-3">
+                            {visible.length === 0 ? (
+                                <p className="text-sm text-gray-400 text-center py-8">Engar pantanir</p>
+                            ) : visible.map(order => {
+                                const name = order._kind === 'online' ? order.name : order.companyId?.name || '—';
+                                return (
+                                    <div key={order._id} className="bg-white rounded-xl border border-gray-100 shadow-sm p-4">
+                                        <div className="flex items-start justify-between gap-3">
+                                            <div className="min-w-0">
+                                                <div className="flex items-center gap-2 mb-1">
+                                                    <span className={`inline-flex text-xs font-medium px-2 py-0.5 rounded-full ${
+                                                        order._kind === 'online' ? 'bg-purple-50 text-purple-700' : 'bg-sky-50 text-sky-700'
+                                                    }`}>
+                                                        {order._kind === 'online' ? 'Vef' : 'Fyrirtæki'}
+                                                    </span>
+                                                </div>
+                                                <p className="font-semibold text-gray-900 text-sm truncate">{name}</p>
+                                                <p className="text-xs text-gray-400 mt-0.5">{formatDate(order.date)}</p>
+                                            </div>
                                             {order._kind === 'online' ? (
-                                                <span className={`inline-flex text-xs font-medium px-2 py-0.5 rounded-full ${
+                                                <span className={`inline-flex text-xs font-medium px-2 py-0.5 rounded-full flex-shrink-0 ${
                                                     order.payed ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-600'
                                                 }`}>
                                                     {order.payed ? 'Greitt' : 'Ógreitt'}
@@ -169,53 +148,126 @@ export default function AllOrders() {
                                                     value={order.status}
                                                     disabled={updatingId === order._id}
                                                     onChange={e => handleStatusChange(order._id, e.target.value)}
-                                                    className={`text-xs font-medium px-2 py-1 rounded-lg border-0 focus:ring-2 focus:ring-amber-300 ${STATUS_CLS[order.status] || ''}`}
+                                                    className={`text-xs font-medium px-2 py-1 rounded-lg border-0 flex-shrink-0 ${STATUS_CLS[order.status] || ''}`}
                                                 >
-                                                    {STATUSES.map(s => (
-                                                        <option key={s} value={s}>{STATUS_LABELS[s]}</option>
-                                                    ))}
+                                                    {STATUSES.map(s => <option key={s} value={s}>{STATUS_LABELS[s]}</option>)}
                                                 </select>
                                             )}
-                                        </td>
-                                        <td className="px-4 py-3.5 text-right">
-                                            {order._kind === 'online' ? (
-                                                <button
-                                                    onClick={() => navigate(`/order/${order.id}`)}
-                                                    className="text-xs font-medium text-amber-700 hover:text-amber-900 transition-colors"
-                                                >
-                                                    Skoða →
-                                                </button>
-                                            ) : (
+                                        </div>
+                                        {order._kind === 'online' ? (
+                                            <button
+                                                onClick={() => navigate(`/order/${order.id}`)}
+                                                className="mt-3 w-full bg-amber-50 hover:bg-amber-100 text-amber-700 text-xs font-medium py-2 rounded-lg transition-colors"
+                                            >
+                                                Skoða →
+                                            </button>
+                                        ) : (
+                                            <>
                                                 <button
                                                     onClick={() => setExpanded(expanded === order._id ? null : order._id)}
-                                                    className="text-xs font-medium text-amber-700 hover:text-amber-900 transition-colors"
+                                                    className="mt-3 w-full bg-amber-50 hover:bg-amber-100 text-amber-700 text-xs font-medium py-2 rounded-lg transition-colors"
                                                 >
-                                                    {expanded === order._id ? 'Loka ▲' : 'Vörur ▼'}
+                                                    {expanded === order._id ? 'Loka ▲' : 'Sýna vörur ▼'}
                                                 </button>
-                                            )}
-                                        </td>
-                                    </tr>
-                                    {order._kind === 'company' && expanded === order._id && (
-                                        <tr>
-                                            <td colSpan={7} className="px-5 pb-4 bg-amber-50/30">
-                                                <ul className="space-y-1 pt-2">
-                                                    {order.products.map((p, i) => (
-                                                        <li key={i} className="text-sm text-gray-700 bg-white border border-amber-100 rounded-lg px-3 py-2">
-                                                            {formatProduct(p)}
-                                                        </li>
-                                                    ))}
-                                                </ul>
-                                                {order.note && (
-                                                    <p className="text-xs text-gray-400 italic mt-2 px-1">"{order.note}"</p>
+                                                {expanded === order._id && (
+                                                    <ul className="mt-2 space-y-1">
+                                                        {order.products.map((p, i) => (
+                                                            <li key={i} className="text-xs text-gray-700 bg-gray-50 border border-amber-100 rounded-lg px-3 py-2">
+                                                                {formatProduct(p)}
+                                                            </li>
+                                                        ))}
+                                                        {order.note && <p className="text-xs text-gray-400 italic mt-1">"{order.note}"</p>}
+                                                    </ul>
                                                 )}
-                                            </td>
-                                        </tr>
-                                    )}
-                                </React.Fragment>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
+                                            </>
+                                        )}
+                                    </div>
+                                );
+                            })}
+                        </div>
+
+                        {/* Desktop table */}
+                        <div className="hidden md:block bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                            <table className="w-full">
+                                <thead>
+                                    <tr className="bg-gray-50 border-b border-gray-100">
+                                        <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Tegund</th>
+                                        <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Nafn</th>
+                                        <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Dagsetning</th>
+                                        <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Sótt</th>
+                                        <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Upphæð</th>
+                                        <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Staða</th>
+                                        <th className="px-4 py-3" />
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-gray-50">
+                                    {visible.length === 0 ? (
+                                        <tr><td colSpan={7} className="px-5 py-8 text-sm text-gray-400 text-center">Engar pantanir</td></tr>
+                                    ) : visible.map(order => (
+                                        <React.Fragment key={order._id}>
+                                            <tr className="hover:bg-amber-50/30 transition-colors">
+                                                <td className="px-4 py-3.5">
+                                                    <span className={`inline-flex text-xs font-medium px-2 py-0.5 rounded-full ${
+                                                        order._kind === 'online' ? 'bg-purple-50 text-purple-700' : 'bg-sky-50 text-sky-700'
+                                                    }`}>
+                                                        {order._kind === 'online' ? 'Vefpöntun' : 'Fyrirtæki'}
+                                                    </span>
+                                                </td>
+                                                <td className="px-4 py-3.5 text-sm font-medium text-gray-900">
+                                                    {order._kind === 'online' ? order.name : order.companyId?.name || '—'}
+                                                </td>
+                                                <td className="px-4 py-3.5 text-sm text-gray-500">{formatDate(order.date)}</td>
+                                                <td className="px-4 py-3.5 text-sm text-gray-500">
+                                                    {order.pickupTime ? `${order._kind === 'company' && order.deliveryType === 'delivery' ? 'Sent' : 'Sótt'} ${order.pickupTime}` : '—'}
+                                                </td>
+                                                <td className="px-4 py-3.5 text-sm text-gray-500">{formatISK(order.totalAmount)}</td>
+                                                <td className="px-4 py-3.5">
+                                                    {order._kind === 'online' ? (
+                                                        <span className={`inline-flex text-xs font-medium px-2 py-0.5 rounded-full ${
+                                                            order.payed ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-600'
+                                                        }`}>
+                                                            {order.payed ? 'Greitt' : 'Ógreitt'}
+                                                        </span>
+                                                    ) : (
+                                                        <select
+                                                            value={order.status}
+                                                            disabled={updatingId === order._id}
+                                                            onChange={e => handleStatusChange(order._id, e.target.value)}
+                                                            className={`text-xs font-medium px-2 py-1 rounded-lg border-0 focus:ring-2 focus:ring-amber-300 ${STATUS_CLS[order.status] || ''}`}
+                                                        >
+                                                            {STATUSES.map(s => <option key={s} value={s}>{STATUS_LABELS[s]}</option>)}
+                                                        </select>
+                                                    )}
+                                                </td>
+                                                <td className="px-4 py-3.5 text-right">
+                                                    {order._kind === 'online' ? (
+                                                        <button onClick={() => navigate(`/order/${order.id}`)} className="text-xs font-medium text-amber-700 hover:text-amber-900 transition-colors">Skoða →</button>
+                                                    ) : (
+                                                        <button onClick={() => setExpanded(expanded === order._id ? null : order._id)} className="text-xs font-medium text-amber-700 hover:text-amber-900 transition-colors">
+                                                            {expanded === order._id ? 'Loka ▲' : 'Vörur ▼'}
+                                                        </button>
+                                                    )}
+                                                </td>
+                                            </tr>
+                                            {order._kind === 'company' && expanded === order._id && (
+                                                <tr>
+                                                    <td colSpan={7} className="px-5 pb-4 bg-amber-50/30">
+                                                        <ul className="space-y-1 pt-2">
+                                                            {order.products.map((p, i) => (
+                                                                <li key={i} className="text-sm text-gray-700 bg-white border border-amber-100 rounded-lg px-3 py-2">{formatProduct(p)}</li>
+                                                            ))}
+                                                        </ul>
+                                                        {order.note && <p className="text-xs text-gray-400 italic mt-2 px-1">"{order.note}"</p>}
+                                                    </td>
+                                                </tr>
+                                            )}
+                                        </React.Fragment>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </>
+                )}
             </main>
         </div>
     );
