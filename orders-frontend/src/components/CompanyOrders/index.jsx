@@ -43,6 +43,7 @@ export default function CompanyOrders() {
     const [loading, setLoading] = useState(true);
     const [expanded, setExpanded] = useState(null);
     const [updatingId, setUpdatingId] = useState(null);
+    const [deletingId, setDeletingId] = useState(null);
 
     useEffect(() => {
         axios.get(`${API}/api/company/admin/orders`, { headers: { Authorization: token } })
@@ -64,6 +65,22 @@ export default function CompanyOrders() {
             alert('Ekki tókst að uppfæra stöðu');
         } finally {
             setUpdatingId(null);
+        }
+    };
+
+    const handleDelete = async (orderId) => {
+        if (!window.confirm('Eyða þessari pöntun?')) return;
+        setDeletingId(orderId);
+        try {
+            await axios.delete(
+                `${API}/api/company/admin/orders/${orderId}`,
+                { headers: { Authorization: token } }
+            );
+            setOrders(prev => prev.filter(o => o._id !== orderId));
+        } catch {
+            alert('Ekki tókst að eyða pöntun');
+        } finally {
+            setDeletingId(null);
         }
     };
 
@@ -121,12 +138,21 @@ export default function CompanyOrders() {
                                     </div>
                                     <StatusSelect order={order} />
                                 </div>
-                                <button
-                                    onClick={() => setExpanded(expanded === order._id ? null : order._id)}
-                                    className="mt-3 w-full bg-amber-50 hover:bg-amber-100 text-amber-700 text-xs font-medium py-2 rounded-lg transition-colors"
-                                >
-                                    {expanded === order._id ? 'Loka ▲' : 'Sýna vörur ▼'}
-                                </button>
+                                <div className="flex gap-2 mt-3">
+                                    <button
+                                        onClick={() => setExpanded(expanded === order._id ? null : order._id)}
+                                        className="flex-1 bg-amber-50 hover:bg-amber-100 text-amber-700 text-xs font-medium py-2 rounded-lg transition-colors"
+                                    >
+                                        {expanded === order._id ? 'Loka ▲' : 'Sýna vörur ▼'}
+                                    </button>
+                                    <button
+                                        onClick={() => handleDelete(order._id)}
+                                        disabled={deletingId === order._id}
+                                        className="px-3 py-2 bg-red-50 hover:bg-red-100 text-red-500 text-xs font-medium rounded-lg transition-colors disabled:opacity-50"
+                                    >
+                                        Eyða
+                                    </button>
+                                </div>
                                 {expanded === order._id && <ProductList order={order} />}
                             </div>
                         ))}
@@ -161,12 +187,21 @@ export default function CompanyOrders() {
                                             <td className="px-5 py-3.5 text-sm text-gray-500">{formatISK(order.totalAmount)}</td>
                                             <td className="px-5 py-3.5"><StatusSelect order={order} /></td>
                                             <td className="px-5 py-3.5 text-right">
-                                                <button
-                                                    onClick={() => setExpanded(expanded === order._id ? null : order._id)}
-                                                    className="text-xs font-medium text-amber-700 hover:text-amber-900 transition-colors"
-                                                >
-                                                    {expanded === order._id ? 'Loka ▲' : 'Vörur ▼'}
-                                                </button>
+                                                <div className="flex items-center justify-end gap-3">
+                                                    <button
+                                                        onClick={() => setExpanded(expanded === order._id ? null : order._id)}
+                                                        className="text-xs font-medium text-amber-700 hover:text-amber-900 transition-colors"
+                                                    >
+                                                        {expanded === order._id ? 'Loka ▲' : 'Vörur ▼'}
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleDelete(order._id)}
+                                                        disabled={deletingId === order._id}
+                                                        className="text-xs font-medium text-red-400 hover:text-red-600 transition-colors disabled:opacity-50"
+                                                    >
+                                                        Eyða
+                                                    </button>
+                                                </div>
                                             </td>
                                         </tr>
                                         {expanded === order._id && (
