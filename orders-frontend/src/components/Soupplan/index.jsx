@@ -37,7 +37,7 @@ const SoupPlanAdmin = () => {
   return (
     <div className="flex min-h-screen bg-gray-50">
       <Sidebar />
-      <main className="flex-1 p-8">
+      <main className="flex-1 p-4 pt-[4.5rem] md:p-8 md:pt-8">
         <h1 className="text-xl font-semibold text-gray-900 mb-6">Súpuplan</h1>
 
         <div className="max-w-2xl space-y-4">

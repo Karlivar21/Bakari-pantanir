@@ -89,10 +89,10 @@ export default function AllOrders() {
     return (
         <div className="flex min-h-screen bg-gray-50">
             <Sidebar />
-            <main className="flex-1 p-8">
-                <div className="flex items-center justify-between mb-6">
+            <main className="flex-1 p-4 pt-[4.5rem] md:p-8 md:pt-8">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
                     <h1 className="text-xl font-semibold text-gray-900">Allar pantanir</h1>
-                    <div className="flex gap-2">
+                    <div className="flex flex-wrap gap-2">
                         {[
                             { key: 'all',     label: `Allar (${rows.length})` },
                             { key: 'online',  label: `Vefpantanir (${onlineCount})` },
@@ -113,7 +113,7 @@ export default function AllOrders() {
                     </div>
                 </div>
 
-                <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                <div className="overflow-x-auto bg-white rounded-xl shadow-sm border border-gray-100">
                     <table className="w-full">
                         <thead>
                             <tr className="bg-gray-50 border-b border-gray-100">

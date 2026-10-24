@@ -72,15 +72,15 @@ const AddOrder = () => {
     return (
         <div className="flex min-h-screen bg-gray-50">
             <Sidebar />
-            <main className="flex-1 p-8">
+            <main className="flex-1 p-4 pt-[4.5rem] md:p-8 md:pt-8">
                 <h1 className="text-xl font-semibold text-gray-900 mb-6">Bæta við pöntun</h1>
 
-                <form onSubmit={handleSubmit} className="flex gap-6 items-start">
+                <form onSubmit={handleSubmit} className="flex flex-col md:flex-row gap-6 items-start">
                     <div className="flex-1 max-w-xl space-y-4">
                         {/* Customer info */}
                         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-4">
                             <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Viðskiptavinur</h2>
-                            <div className="grid grid-cols-2 gap-3">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                 <div>
                                     <Label>Nafn</Label>
                                     <input className={inputCls} type="text" value={name} onChange={e => setName(e.target.value)} required />
@@ -128,7 +128,7 @@ const AddOrder = () => {
                     </div>
 
                     {/* Order summary */}
-                    <div className="w-72 bg-white rounded-xl shadow-sm border border-gray-100 p-6 sticky top-8">
+                    <div className="w-full md:w-72 bg-white rounded-xl shadow-sm border border-gray-100 p-6 md:sticky md:top-8">
                         <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4">Pöntun</h2>
                         {products.length > 0 ? (
                             <ul className="space-y-2">

@@ -13,6 +13,7 @@ export default function Companies() {
   const [loading, setLoading] = useState(true);
   const [name, setName] = useState('');
   const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -30,12 +31,12 @@ export default function Companies() {
   const handleCreate = async (e) => {
     e.preventDefault();
     setError(''); setSuccess('');
-    if (!name || !username || !password) return setError('Fylltu út öll reiti');
+    if (!name || !username || !email || !password) return setError('Fylltu út öll reiti');
     setSubmitting(true);
     try {
-      await axios.post(`${API}/api/company/admin/companies`, { name, username, password }, { headers: { Authorization: token } });
+      await axios.post(`${API}/api/company/admin/companies`, { name, username, email, password }, { headers: { Authorization: token } });
       setSuccess(`Fyrirtæki "${name}" stofnað`);
-      setName(''); setUsername(''); setPassword('');
+      setName(''); setUsername(''); setEmail(''); setPassword('');
       fetchCompanies();
     } catch (err) {
       setError(err.response?.data?.error || 'Villa við stofnun');
@@ -57,12 +58,12 @@ export default function Companies() {
   return (
     <div className="flex min-h-screen bg-gray-50">
       <Sidebar />
-      <main className="flex-1 p-8">
+      <main className="flex-1 p-4 pt-[4.5rem] md:p-8 md:pt-8">
         <h1 className="text-xl font-semibold text-gray-900 mb-6">Fyrirtæki</h1>
 
-        <div className="flex gap-6 items-start">
+        <div className="flex flex-col md:flex-row gap-6 items-start">
           {/* Create form */}
-          <div className="w-80 flex-shrink-0">
+          <div className="w-full md:w-80 flex-shrink-0">
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
               <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4">Stofna fyrirtæki</h2>
               {error && <div className="mb-3 text-sm text-red-600 bg-red-50 border border-red-100 rounded-lg px-3 py-2">{error}</div>}
@@ -75,6 +76,10 @@ export default function Companies() {
                 <div>
                   <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Notendanafn</label>
                   <input className={inputCls} type="text" value={username} onChange={e => setUsername(e.target.value)} placeholder="daemi_hf" required />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Netfang</label>
+                  <input className={inputCls} type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="fyrirtaeki@dæmi.is" required />
                 </div>
                 <div>
                   <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Lykilorð</label>
@@ -93,7 +98,7 @@ export default function Companies() {
 
           {/* Company list */}
           <div className="flex-1">
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+            <div className="overflow-x-auto bg-white rounded-xl shadow-sm border border-gray-100">
               <table className="w-full">
                 <thead>
                   <tr className="bg-gray-50 border-b border-gray-100">

@@ -35,7 +35,7 @@ const OrderList = () => {
     return (
         <div className="flex min-h-screen bg-gray-50">
             <Sidebar />
-            <main className="flex-1 p-8">
+            <main className="flex-1 p-4 pt-[4.5rem] md:p-8 md:pt-8">
                 <div className="flex items-center justify-between mb-6">
                     <h1 className="text-xl font-semibold text-gray-900">Allar pantanir</h1>
                     <button
@@ -53,7 +53,7 @@ const OrderList = () => {
                         value={searchEmail}
                         onChange={(e) => setSearchEmail(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                        className="border border-gray-200 rounded-lg px-3 py-2 text-sm bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-300 focus:border-amber-400 w-64"
+                        className="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-300 focus:border-amber-400"
                     />
                     <button
                         onClick={handleSearch}
@@ -63,7 +63,7 @@ const OrderList = () => {
                     </button>
                 </div>
 
-                <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                <div className="overflow-x-auto bg-white rounded-xl shadow-sm border border-gray-100">
                     <table className="w-full">
                         <thead>
                             <tr className="bg-gray-50 border-b border-gray-100">
